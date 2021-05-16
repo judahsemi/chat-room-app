@@ -3,7 +3,7 @@ import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from utils.helper import generate_slug, assert_access
+from utils.helper import generate_slug
 
 import config as cfg
 from config import config
