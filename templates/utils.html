@@ -1,0 +1,23 @@
+
+
+<!-- Don't forget about adding placeholders to input box -->
+
+{% macro create_form(form) %}
+  {{ form.hidden_tag() }}
+
+  {% for fieldname in form.display %}
+  <div class="input-group">
+    {{ form[fieldname].label() }}
+    <div>
+      {{ form[fieldname](class="") }}
+      {% if form[fieldname].errors %}
+        {% for error in form[fieldname].errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+{% endmacro %}
+
+

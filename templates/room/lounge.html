@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block head_scripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+  });
+</script>
+{% endblock %}
+
+
+{% block title %}
+<title>Lounge</title>
+{% endblock %}
+
+
+{% block main %}
+<section>
+  <p><a href="{{ url_for('room_bp.dashboard') }}">Dashboard</a></p>
+  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
+</section>
+
+
+<section>
+  <h3>Room {{ room.number }} is ready</h3>
+  <p>Thus room currently has {{ room.members.all().__len__() }} members</p>
+</section>
+
+
+<section>
+  <form action="" method="POST">
+    {% if username %}
+    <p>You are entering as {{ username }}</p>
+    {% else %}
+    <h3>Confirm your details before entering</h3>
+
+    {{ create_form(form) }}
+    {% endif %}
+
+    <button type="submit">Enter</button>
+  </form>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

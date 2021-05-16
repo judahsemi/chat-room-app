@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block title %}
+<title>Register</title>
+{% endblock %}
+
+
+{% block main %}
+<section>
+  <form action="" method="POST">
+    <h3>Create an Account</h3>
+    
+    {{ create_form(form) }}
+
+    <button type="submit">Register</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember">Remember me
+    </label>
+  </form>
+  <div>
+    <a href="{{ url_for('room_bp.login') }}"><button>Login</button></a>
+  </div>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

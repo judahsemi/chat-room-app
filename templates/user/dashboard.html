@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block head_scripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+  });
+</script>
+{% endblock %}
+
+
+{% block title %}
+<title>Dashboard</title>
+{% endblock %}
+
+
+{% block main %}
+<section>
+  <p><a href="{{ url_for('room_bp.create_room') }}">Create room</a></p>
+  <p><a href="{{ url_for('room_bp.join_room') }}">Join room</a></p>
+  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
+</section>
+
+<section>
+  <h3>Rooms you are in</h3>
+  
+  <p>Owned by you</p>
+  <ul>
+    {% if owned_rooms %}
+    {% for room in owned_rooms %}
+    <li>
+      <div>
+        <p>No.: {{ room.number }}, Secret: {{ room.secret }}</p>
+        <p><a href="{{ url_for('room_bp.lounge', room=room) }}">Lounge</a></p>
+        <p><a href="{{ url_for('room_bp.room', room=room) }}">Room</a></p>
+      </div>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>Empty</p>
+    {% endif %}
+  </ul>
+
+  <p>Owned by others</p>
+  <ul>
+    {% if other_rooms %}
+    {% for room in other_rooms %}
+    <li>
+      <div>
+        <p>No.: {{ room.number }}, Secret: {{ room.secret }}</p>
+        <p><a href="{{ url_for('room_bp.lounge', room=room) }}">Lounge</a></p>
+        <p><a href="{{ url_for('room_bp.room', room=room) }}">Room</a></p>
+      </div>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>Empty</p>
+    {% endif %}
+  </ul>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

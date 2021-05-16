@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/room.css') }}">
+{% endblock %}
+
+{% block head_scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/socket.io.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.6.0.min.js') }}"></script>
+{% endblock %}
+
+{% block body_scripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    var socket = io.connect();
+
+    var data = {};
+    data["username"] = "{{ username }}";
+    data["number"] = "{{ room.number }}";
+    data["secret"] = "{{ room.secret }}";
+
+    socket.emit("entered", data);
+
+    socket.on("message", function(msg) {
+      $("#messages").append(add_message(msg));
+    });
+
+    $("#sendMessageBtn").on("click", function() {
+      socket.send(data, $("#myMessage").val());
+      $("#myMessage").val("");
+    });
+
+    function add_message(msg) {
+      if (msg.category == 10) {
+        return `<li class="notify"><span class="text">${msg.info}</span></li>`
+      }
+      else if (msg.username === data["username"]) {
+        return `<li class="chat right"><span class="sender">You</span><p class="text">${msg.info}</p><span class="date">${msg.logged_at} GMT+1</span></li>`
+      }
+      else {
+        return `<li class="chat left"><span class="sender">${msg.username}</span><p class="text">${msg.info}</p><span class="date">${msg.logged_at} GMT+1</span></li>`
+      }
+    }
+  });
+</script>
+{% endblock %}
+
+
+{% block title %}
+<title>Chat room</title>
+{% endblock %}
+
+
+{% block main %}
+<section>
+  <p><a href="{{ url_for('room_bp.dashboard') }}">Dashboard</a></p>
+  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
+</section>
+
+
+<section>
+  <ul id="messages">
+    {% for log in logs %}
+    {% if log.category == 10 %}
+    <li class="notify">
+      <span class="text">{{ log.info }}</span>
+    </li>
+    {% elif log.username == username %}
+    <li class=" chat right">
+      <span class="sender">You</span>
+      <p class="text">{{ log.info }}</p>
+      <span class="date">{{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+    </li>
+    {% else %}
+    <li class=" chat left">
+      <span class="sender">{{ log.username }}</span>
+      <p class="text">{{ log.info }}</p>
+      <span class="date">{{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+
+
+<section>
+  <div class="keyboard">
+    <!-- <p>Status : <span id="connection"></span></p> -->
+    <textarea name="" id="myMessage" placeholder="Enter message..."></textarea>
+    <button id="sendMessageBtn">Send</button>
+  </div>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+
