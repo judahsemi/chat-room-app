@@ -45,16 +45,15 @@ def receive_message(data, msg):
 
     log = Log(
         info=msg,
-        user_username=result["username"],
         category=cfg.LogConstant.CAT_CHAT,
+        username=result["username"],
         room=result["room"],
         user=result["user"]).add(commit=True)
-    msg = {
-        "info": log.info,
-        "category": log.category,
-        "user_username": log.user_username}
+
+    ret_json = log.clean_json()
+    ret_json["logged_at"] = str(ret_json.get("logged_at").strftime("%H:%M"))
     print(">>>", "Sending message to the entire room", flush=True)
-    send(msg, to=str(log.room.number))
+    send(ret_json, to=str(log.room.number))
 
 
 def validate_request(data):
@@ -69,9 +68,9 @@ def validate_request(data):
         print(">>>", "Could not find the room", flush=True)
         return False
 
-    user = room.get_user_from_username(Log, data["username"])
-    if (not user) or (user not in room.guests) or (user != current_user):
-        print(">>>", "Could not find the user", flush=True)
+    user = room.get_user_with_username(data["username"])
+    if (not user) or (user not in room.members) or (user != current_user):
+        print(">>>", "Not authorized", flush=True)
         return False
 
     print(">>>", "Request validated", flush=True)

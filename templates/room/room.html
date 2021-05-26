@@ -36,13 +36,13 @@
 
     function add_message(msg) {
       if (msg.category == 10) {
-        return `<li class="notify"><span class="text">${msg.info}</span></li>`
+        return `<li class="notify-item"><span class="text">${msg.info}</span></li>`
       }
       else if (msg.username === data["username"]) {
-        return `<li class="chat right"><span class="sender">You</span><p class="text">${msg.info}</p><span class="date">${msg.logged_at} GMT+1</span></li>`
+        return `<li class="chat-item flex-right"><span class="chat-item-head flex-right">You, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-right my-chat">${msg.info}</span></li>`
       }
       else {
-        return `<li class="chat left"><span class="sender">${msg.username}</span><p class="text">${msg.info}</p><span class="date">${msg.logged_at} GMT+1</span></li>`
+        return `<li class="chat-item flex-left"><span class="chat-item-head flex-left">${msg.username}, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-left others-chat">${msg.info}</span></li>`
       }
     }
   });
@@ -61,38 +61,35 @@
   <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
 </section>
 
+<section class="head-section">
+  <h2 class="room-topic">{{ room.topic }}</h2>
+</section>
 
-<section>
-  <ul id="messages">
+<section class="chat-section">
+  <ul id="messages" class="log-itemlist">
     {% for log in logs %}
     {% if log.category == 10 %}
-    <li class="notify">
+    <li class="notify-item">
       <span class="text">{{ log.info }}</span>
     </li>
     {% elif log.username == username %}
-    <li class=" chat right">
-      <span class="sender">You</span>
-      <p class="text">{{ log.info }}</p>
-      <span class="date">{{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+    <li class="chat-item flex-right">
+      <span class="chat-item-head flex-right">You, {{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+      <span class="chat-item-chat flex-right my-chat">{{ log.info }}</span>
     </li>
     {% else %}
-    <li class=" chat left">
-      <span class="sender">{{ log.username }}</span>
-      <p class="text">{{ log.info }}</p>
-      <span class="date">{{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+    <li class="chat-item flex-left">
+      <span class="chat-item-head flex-left">{{ log.username }}, {{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+      <span class="chat-item-chat flex-left others-chat">{{ log.info }}</span>
     </li>
     {% endif %}
     {% endfor %}
   </ul>
 </section>
 
-
-<section>
-  <div class="keyboard">
-    <!-- <p>Status : <span id="connection"></span></p> -->
-    <textarea name="" id="myMessage" placeholder="Enter message..."></textarea>
-    <button id="sendMessageBtn">Send</button>
-  </div>
+<section class="input-section">
+  <input type="" id="myMessage" name="" placeholder="Type your message...">
+  <button id="sendMessageBtn" type="button">Send</button>
 </section>
 {% endblock %}
 
