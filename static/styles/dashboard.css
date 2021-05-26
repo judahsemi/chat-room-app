@@ -1,0 +1,120 @@
+
+
+
+.up, .down {
+  padding: 20px;
+}
+
+.up {
+  border-bottom: 2.5px solid #7c3abc;
+}
+
+.up button {
+  padding: 10px 14px;
+  background-color: #7c3abc;
+  color: #ffffff;
+  border: 2.5px solid #7c3abc;
+
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.up .up-btn-inverse {
+  padding: 10px 14px;
+  background-color: #ffffff;
+  color: #7c3abc;
+  border: 2.5px solid #7c3abc;
+
+  border-radius: 8px;
+}
+
+.up button:hover {
+  background-color: #af69ef;
+  color: #ffffff;
+  border: 2.5px solid #af69ef;
+}
+
+.room-itemlist {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.room-item {
+  padding: 10px;
+  border: 2px solid #7c3abc;
+}
+
+.room-item:hover {
+  background: lightblue;
+}
+
+.room-item + .room-item {
+  margin-top: 20px;
+}
+
+.room-item a {
+  text-decoration: none;
+}
+
+.room-card {
+  display: flex;
+  flex-direction: row;
+  /*justify-content: none;*/
+  /*align-content: none;*/
+
+  position: relative;
+}
+
+.room-card-left {
+  flex: 1 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: stretch;
+}
+
+.room-topic {
+  font-size: 16px;
+  color: #0c0c0c;
+
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.room-lastlog {
+  font-size: 12px;
+  color: gray;
+  margin-top: 4px;
+}
+
+.room-card-right {
+  flex: 0 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: stretch;
+
+  margin-left: 4px;
+}
+
+.room-lastlogdate {
+  font-size: 12px;
+  color: gray;
+}
+
+.card-tag {
+  position: absolute;
+  top: -20px;
+  right: 0px;
+
+  font-size: 10px;
+  border: 1.5px solid #af69ef;
+  background-color: none;
+  border-radius: 64px;
+
+  padding: 6px 8px;
+}
+

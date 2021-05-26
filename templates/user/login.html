@@ -4,6 +4,7 @@
 
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/form.css') }}">
 {% endblock %}
 
 
@@ -13,19 +14,19 @@
 
 
 {% block main %}
-<section>
+<section class="form-section">
   <form action="" method="POST">
-    <h3>Login</h3>
+    <h2 class="form-head">Login</h2>
     
     {{ create_form(form) }}
 
-    <button type="submit">Login</button>
     <label>
       <input type="checkbox" checked="checked" name="remember">Remember me
     </label>
+    <button type="submit">Login</button>
   </form>
   <div>
-    <a href="{{ url_for('room_bp.register') }}"><button>Register</button></a>
+    <a href="{{ url_for('room_bp.register') }}"><button class="submit-btn-inverse">Register</button></a>
     <span class="psw"><a href="#">Forgot password?</a></span>
   </div>
 </section>

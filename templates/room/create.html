@@ -4,6 +4,7 @@
 
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/form.css') }}">
 {% endblock %}
 
 
@@ -16,7 +17,7 @@
 
 
 {% block title %}
-<title>Dashboard</title>
+<title>Create Room</title>
 {% endblock %}
 
 
@@ -26,9 +27,9 @@
   <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
 </section>
 
-<section>
+<section class="form-section">
   <form action="" method="POST">
-    <h3>Create Room</h3>
+    <h2 class="form-head">Create Room</h2>
     
     {{ create_form(form) }}
 

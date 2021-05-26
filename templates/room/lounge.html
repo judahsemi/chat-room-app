@@ -4,6 +4,8 @@
 
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/lounge.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/form.css') }}">
 {% endblock %}
 
 
@@ -27,18 +29,19 @@
 </section>
 
 
-<section>
-  <h3>Room {{ room.number }} is ready</h3>
-  <p>Thus room currently has {{ room.members.all().__len__() }} members</p>
+<section class="content-section">
+  <h2 class="room-topic">{{ room.topic }}</h2>
+  <span class="room-number">room {{ room.number }}</span>
+  <span class="room-info">{{ room.members.all().__len__() }} member(s)</span>
 </section>
 
 
-<section>
+<section class="form-section">
   <form action="" method="POST">
     {% if username %}
-    <p>You are entering as {{ username }}</p>
+    <p class="form-head">You are entering as {{ username }}</p>
     {% else %}
-    <h3>Confirm your details before entering</h3>
+    <h3 class="form-head">Confirm your details before entering</h3>
 
     {{ create_form(form) }}
     {% endif %}

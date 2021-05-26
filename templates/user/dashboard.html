@@ -4,6 +4,7 @@
 
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dashboard.css') }}">
 {% endblock %}
 
 
@@ -22,41 +23,37 @@
 
 {% block main %}
 <section>
-  <p><a href="{{ url_for('room_bp.create_room') }}">Create room</a></p>
-  <p><a href="{{ url_for('room_bp.join_room') }}">Join room</a></p>
   <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
 </section>
 
-<section>
-  <h3>Rooms you are in</h3>
-  
-  <p>Owned by you</p>
-  <ul>
-    {% if owned_rooms %}
-    {% for room in owned_rooms %}
-    <li>
-      <div>
-        <p>No.: {{ room.number }}, Secret: {{ room.secret }}</p>
-        <p><a href="{{ url_for('room_bp.lounge', room=room) }}">Lounge</a></p>
-        <p><a href="{{ url_for('room_bp.room', room=room) }}">Room</a></p>
-      </div>
-    </li>
-    {% endfor %}
-    {% else %}
-    <p>Empty</p>
-    {% endif %}
-  </ul>
+<section class="up">
+  <a href="{{ url_for('room_bp.create_room') }}"><button>Create room</button></a>
+  <a href="{{ url_for('room_bp.join_room') }}"><button class="up-btn-inverse">Join room</button></a>
+</section>
 
-  <p>Owned by others</p>
-  <ul>
-    {% if other_rooms %}
-    {% for room in other_rooms %}
-    <li>
-      <div>
-        <p>No.: {{ room.number }}, Secret: {{ room.secret }}</p>
-        <p><a href="{{ url_for('room_bp.lounge', room=room) }}">Lounge</a></p>
-        <p><a href="{{ url_for('room_bp.room', room=room) }}">Room</a></p>
-      </div>
+<section class="down">
+  <h2>Rooms</h2>
+
+  <ul class="room-itemlist">
+    {% if joined_rooms %}
+    {% for room in joined_rooms %}
+    <li class="room-item">
+      <a href="{{ url_for('room_bp.room', room=room) }}">
+        <div class="room-card">
+          <div class="room-card-left">
+            <span class="room-topic">{{ room.topic }}</span>
+            <span class="room-lastlog">{{ room.logs.all()[-1].info }}</span>
+          </div>
+          <div class="room-card-right">
+            <!-- <span class="room-number">RM {{ room.number }}</span> -->
+            <span class="room-lastlogdate">{{ room.logs.all()[-1].logged_at.strftime("%b %d") }}</span>
+          </div>
+
+          {% if room.admin == current_user %}
+          <button class="card-tag">admin</button>
+          {% endif %}
+        </div>
+      </a>
     </li>
     {% endfor %}
     {% else %}

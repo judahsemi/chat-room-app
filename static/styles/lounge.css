@@ -1,0 +1,26 @@
+
+
+
+.content-section {
+  padding: 20px;
+}
+
+.room-topic {
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.room-number {
+  font-size: 12px;
+  text-align: center;
+  display: block;
+}
+
+.room-info {
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+  display: block;
+}
+
