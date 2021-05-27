@@ -59,7 +59,7 @@ class Room(_CRUD, db.Model):
         return None
 
     def get_user_with_username(self, username):
-        logs = self.log.filter_by(username=username).all()
+        logs = self.logs.filter_by(username=username).all()
         for log in logs:
             if log.user:
                 return log.user
