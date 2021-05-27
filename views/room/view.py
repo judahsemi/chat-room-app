@@ -36,10 +36,8 @@ def dashboard():
     user = current_user
     prev, _next = navigate_url(request)
 
-    owned_rooms = user.owned_rooms.all()
-    other_rooms = [room for room in user.joined_rooms.all() if room not in owned_rooms]
-    return render_template("user/dashboard.html", _next=_next, owned_rooms=owned_rooms,
-        other_rooms=other_rooms)
+    joined_rooms = user.joined_rooms.all()
+    return render_template("user/dashboard.html", _next=_next, joined_rooms=joined_rooms)
 
 
 @room_bp.route("/rooms/create/", methods=["GET", "POST"])
