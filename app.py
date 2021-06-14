@@ -21,7 +21,7 @@ from main import create_app
 
 
 
-app = create_app(os.environ.get("CONFIG_NAME") or "development")
+app = create_app(os.environ.get("CONFIG_NAME") or "default")
 
 
 
