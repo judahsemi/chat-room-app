@@ -59,7 +59,6 @@ class _CRUD:
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-from .account import User
-from .room import Room
-from .room_contd import Settings, Log
+from .account import User, Enterprise, EmployeeProfile
+from .room import Room, Settings, Log, MemberProfile
 

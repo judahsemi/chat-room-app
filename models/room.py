@@ -12,11 +12,6 @@ from .main import _CRUD, Protected, login_manager
 
 
 
-members = db.Table("members",
-    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("room_id", db.Integer, db.ForeignKey("rooms.id")),)
-
-
 class Room(_CRUD, db.Model):
     """ """
     __tablename__ = "rooms"
@@ -31,9 +26,8 @@ class Room(_CRUD, db.Model):
     # Relationships
     admin_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     settings_id = db.Column(db.Integer, db.ForeignKey("settings.id"), nullable=False)
-    members = db.relationship("User", secondary=members,
-        backref=db.backref("joined_rooms", lazy="dynamic"), lazy="dynamic")
-    logs = db.relationship("Log", backref="room", lazy="dynamic")
+    enterprise_id = db.Column(db.Integer, db.ForeignKey("enterprises.id"), nullable=True)
+    members = db.relationship("MemberProfile", backref="room", lazy="dynamic")
 
     def __init__(self, **kwargs):
         kwargs["number"], kwargs["secret"] = self.generate_auth()
@@ -72,4 +66,58 @@ class Room(_CRUD, db.Model):
 
     def __repr__(self):
         return "<Room: %s>" % (self.number)
+
+
+class Settings(_CRUD, db.Model):
+    """ """
+    __tablename__ = "settings"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    max_user = db.Column(db.Integer, default=2)
+    allow_download = db.Column(db.Boolean, default=True)
+
+    # Relationships
+    room = db.relationship("Room", backref="settings", lazy=True, uselist=False)
+
+    def __repr__(self):
+        return "<Settings: %s>" % (self.room.number)
+
+
+class Log(_CRUD, db.Model):
+    """ """
+    __tablename__ = "logs"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    info = db.Column(db.Text, nullable=False)
+    category = db.Column(db.Integer, nullable=False)
+    username = db.Column(db.String(32), nullable=True)
+    logged_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    # Relationships
+    room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
+    member_id = db.Column(db.Integer, db.ForeignKey("member_profiles.id"), nullable=True)
+
+    def clean_json(self):
+        return {"info": self.info, "category": self.category, "username": self.username,
+        "logged_at": self.logged_at, "room_number": self.room.number}
+
+    def __repr__(self):
+        return "<Log: %s %s>" % (self.room.number, self.category)
+
+
+class MemberProfile(_CRUD, db.Model):
+    """ """
+    __tablename__ = "member_profiles"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(64), nullable=True)
+    joined_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow)
+
+    # Relationships
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
+    logs = db.relationship("Log", backref="member", lazy="dynamic")
+
+    def __repr__(self):
+        return "<Member Profile: %s %s>" % (self.room.number, self.user.email)
 
