@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Settings, Log
+from models.main import db, User, Room, Settings, Log, Enterprise, EmployeeProfile
 from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
 
 # from utils.html_object import HtmlTableView
@@ -36,8 +36,11 @@ def dashboard():
     user = current_user
     prev, _next = navigate_url(request)
 
-    joined_rooms = user.joined_rooms.all()
-    return render_template("user/dashboard.html", _next=_next, joined_rooms=joined_rooms)
+    joined_rooms = []#user.joined_rooms.all()
+    emp_profiles = EmployeeProfile.query.filter_by(user=user).all()
+    enterprises = Enterprise.query.filter(EmployeeProfile.user == user).all()
+    return render_template("user/dashboard.html", _next=_next, joined_rooms=joined_rooms,
+        emp_profiles=emp_profiles, enterprises=enterprises)
 
 
 @room_bp.route("/rooms/create/", methods=["GET", "POST"])
