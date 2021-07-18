@@ -30,8 +30,10 @@ def create_app(config_name):
     app.url_map.converters["real_room"] = converter.RealRoom
 
     # Views
+    from views.enterprise.main import ent_bp
     from views.room.main import room_bp
     
+    app.register_blueprint(ent_bp, url_prefix="")
     app.register_blueprint(room_bp, url_prefix="")
 
     return app
