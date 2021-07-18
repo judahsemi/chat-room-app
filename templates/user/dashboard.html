@@ -22,10 +22,6 @@
 
 
 {% block main %}
-<section>
-  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
-</section>
-
 <section class="up">
   <a href="{{ url_for('room_bp.create_room') }}"><button>Create room</button></a>
   <a href="{{ url_for('room_bp.join_room') }}"><button class="up-btn-inverse">Join room</button></a>

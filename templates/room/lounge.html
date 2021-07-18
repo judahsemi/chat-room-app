@@ -23,12 +23,6 @@
 
 
 {% block main %}
-<section>
-  <p><a href="{{ url_for('room_bp.dashboard') }}">Dashboard</a></p>
-  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
-</section>
-
-
 <section class="content-section">
   <h2 class="room-topic">{{ room.topic }}</h2>
   <span class="room-number">room {{ room.number }}</span>
