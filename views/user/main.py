@@ -13,8 +13,9 @@ from flask import Flask, Blueprint
 
 
 
-room_bp = Blueprint("room_bp", __name__)
+user_bp = Blueprint("user_bp", __name__)
 
 
+from . import auth
 from . import view
 

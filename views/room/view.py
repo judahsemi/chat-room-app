@@ -20,29 +20,6 @@ from .main import room_bp
 
 
 
-@room_bp.route("/", methods=["GET"])
-def index():
-    """ """
-    user = current_user
-    prev, _next = navigate_url(request)
-
-    return render_template("user/index.html")
-
-
-@room_bp.route("/dashboard/", methods=["GET"])
-@login_required
-def dashboard():
-    """ """
-    user = current_user
-    prev, _next = navigate_url(request)
-
-    joined_rooms = []#user.joined_rooms.all()
-    emp_profiles = EmployeeProfile.query.filter_by(user=user).all()
-    enterprises = Enterprise.query.filter(EmployeeProfile.user == user).all()
-    return render_template("user/dashboard.html", _next=_next, joined_rooms=joined_rooms,
-        emp_profiles=emp_profiles, enterprises=enterprises)
-
-
 @room_bp.route("/rooms/create/", methods=["GET", "POST"])
 @login_required
 def create_room():
@@ -88,7 +65,7 @@ def lounge(room):
     
     if user not in room.members.all():
         flash("You have not yet joined this room.")
-        return redirect(prev or url_for("room_bp.dashboard"))
+        return redirect(prev or url_for("user_bp.dashboard"))
 
     username = room.get_user_username(user)
     form = FirstTimeGuestForm(username=username)
@@ -112,7 +89,7 @@ def room(room):
 
     if user not in room.members.all():
         flash("You have not yet joined this room.")
-        return redirect(prev or url_for("room_bp.dashboard"))
+        return redirect(prev or url_for("user_bp.dashboard"))
 
     username = room.get_user_username(user)
     if not username:

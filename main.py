@@ -10,7 +10,7 @@ from config import config
 
 
 login_manager = LoginManager()
-login_manager.login_view = "room_bp.login"
+login_manager.login_view = "user_bp.login"
 db = SQLAlchemy()
 socketio = SocketIO()
 
@@ -30,9 +30,11 @@ def create_app(config_name):
     app.url_map.converters["real_room"] = converter.RealRoom
 
     # Views
+    from views.user.main import user_bp
     from views.enterprise.main import ent_bp
     from views.room.main import room_bp
     
+    app.register_blueprint(user_bp, url_prefix="")
     app.register_blueprint(ent_bp, url_prefix="")
     app.register_blueprint(room_bp, url_prefix="")
 
