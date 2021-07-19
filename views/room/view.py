@@ -77,20 +77,13 @@ def room(room):
     user = current_user
     prev, _next = navigate_url(request)
 
-    if user not in room.members.all():
+    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
 
-    username = room.get_user_username(user)
-    if not username:
-        flash("You need to have confirmed your details here.")
-        return redirect(url_for("room_bp.lounge", room=room))
-
     form = RoomMessageForm()
-    logs = [log.clean_json() for log in room.logs.all()]
-
-    user = user
-    session["username"] = username
-    return render_template("room/room.html", form=form, logs=logs, room=room, user=user,
-        username=username)
+    logs = room.logs.all()
+    return render_template("room/room.html", form=form, logs=logs, room=room,
+        memb_profile=memb_profile)
 

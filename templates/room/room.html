@@ -16,12 +16,11 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
-    var socket = io.connect();
+    var socket = io.connect("/room-chat");
 
     var data = {};
-    data["username"] = "{{ username }}";
+    data["username"] = "{{ memb_profile.username }}";
     data["number"] = "{{ room.number }}";
-    data["secret"] = "{{ room.secret }}";
 
     socket.emit("entered", data);
 
@@ -38,11 +37,11 @@
       if (msg.category == 10) {
         return `<li class="notify-item"><span class="text">${msg.info}</span></li>`
       }
-      else if (msg.username === data["username"]) {
+      else if (msg.sender_username === data["username"]) {
         return `<li class="chat-item flex-right"><span class="chat-item-head flex-right">You, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-right my-chat">${msg.info}</span></li>`
       }
       else {
-        return `<li class="chat-item flex-left"><span class="chat-item-head flex-left">${msg.username}, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-left others-chat">${msg.info}</span></li>`
+        return `<li class="chat-item flex-left"><span class="chat-item-head flex-left">${msg.sender_username}, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-left others-chat">${msg.info}</span></li>`
       }
     }
   });
@@ -56,30 +55,25 @@
 
 
 {% block main %}
-<section>
-  <p><a href="{{ url_for('room_bp.dashboard') }}">Dashboard</a></p>
-  <p><a href="{{ url_for('room_bp.logout') }}">Logout</a></p>
-</section>
-
 <section class="head-section">
   <h2 class="room-topic">{{ room.topic }}</h2>
 </section>
 
 <section class="chat-section">
-  <ul id="messages" class="log-itemlist">
+  <ul id="messages" class="log-itemlist">{{ logs.__len__() }}, {{ memb_profile.room.logs.all().__len__() }}
     {% for log in logs %}
     {% if log.category == 10 %}
     <li class="notify-item">
       <span class="text">{{ log.info }}</span>
     </li>
-    {% elif log.username == username %}
+    {% elif log.member.user == memb_profile.user %}
     <li class="chat-item flex-right">
       <span class="chat-item-head flex-right">You, {{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
       <span class="chat-item-chat flex-right my-chat">{{ log.info }}</span>
     </li>
     {% else %}
     <li class="chat-item flex-left">
-      <span class="chat-item-head flex-left">{{ log.username }}, {{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
+      <span class="chat-item-head flex-left">{{ log.member.username }}, {{ log.logged_at.strftime("%H:%M") }} GMT+1</span>
       <span class="chat-item-chat flex-left others-chat">{{ log.info }}</span>
     </li>
     {% endif %}
@@ -88,7 +82,7 @@
 </section>
 
 <section class="input-section">
-  <input type="" id="myMessage" name="" placeholder="Type your message...">
+  <input type="" id="myMessage" name="" placeholder="Type your message..." autofocus>
   <button id="sendMessageBtn" type="button">Send</button>
 </section>
 {% endblock %}

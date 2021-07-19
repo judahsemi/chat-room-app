@@ -81,7 +81,6 @@ class Log(_CRUD, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     info = db.Column(db.Text, nullable=False)
     category = db.Column(db.Integer, nullable=False)
-    username = db.Column(db.String(32), nullable=True)
     logged_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     # Relationships
@@ -89,8 +88,8 @@ class Log(_CRUD, db.Model):
     member_id = db.Column(db.Integer, db.ForeignKey("member_profiles.id"), nullable=True)
 
     def clean_json(self):
-        return {"info": self.info, "category": self.category, "username": self.username,
-        "logged_at": self.logged_at, "room_number": self.room.number}
+        return {"info": self.info, "category": self.category, "logged_at": self.logged_at,
+            "room_number": self.room.number}
 
     def __repr__(self):
         return "<Log: %s %s>" % (self.room.number, self.category)
