@@ -66,6 +66,11 @@ class RoomConstant:
     NUM_LOWER_LIMIT = 100 # inclusive
     NUM_UPPER_LIMIT = 999999 # inclusive
 
+    KIND_OPEN = 10 # anyone can join
+    KIND_CLOSE = 20 # anyone can join but by invite only
+    KIND_PRIVATE = 30 # anyone in an enterprise can join
+    KIND_EXCLUSIVE = 40 # anyone in an enterprise can join but by invite only
+
 
 # Constants related to Log model
 class LogConstant:

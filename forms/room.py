@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, send, emit
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Settings, Log
+from models.main import db, User, Room, Settings, Log, MemberProfile
 
 from utils.helper import generate_slug, generate_id
 
@@ -17,25 +17,35 @@ class CreateRoomForm(FlaskForm):
     topic = wtforms.StringField(
         "Topic",
         validators=[validators.DataRequired()])
+    kind = wtforms.SelectField(
+        "Type",
+        choices=(
+            (cfg.RoomConstant.KIND_OPEN, "Public"),
+            (cfg.RoomConstant.KIND_CLOSE, "Private")),
+        coerce=int,
+        validators=[validators.DataRequired()])
 
-    display = ["topic"]
+    display = ["topic", "kind"]
 
     def save(self, user, commit=True, **kwargs):
         settings = Settings().add(commit=False)
         room = Room(
             topic=self.topic.data,
+            kind=self.kind.data,
             settings=settings,
             admin=user,
             **kwargs).add(commit=commit)
 
-        room.members.append(user)
-        room.save(commit=commit)
+        memb_profile = MemberProfile(
+            username=user.def_username,
+            user=user,
+            room=room).add(commit=commit)
 
         log = Log(
             info="Admin created and joined this room",
             category=cfg.LogConstant.CAT_ROOM,
             room=room,
-            user=user).add(commit=commit)
+            member=memb_profile).add(commit=commit)
         print(">>>", log.info, log.room.number, flush=True)
         send(log.clean_json(), to=str(log.room.number), namespace="/chat")
         return room
@@ -45,25 +55,27 @@ class JoinRoomForm(FlaskForm):
     number = wtforms.StringField(
         "Room Number",
         validators=[validators.DataRequired()])
-    secret = wtforms.StringField(
+    password = wtforms.StringField(
         "Room Pass",
-        validators=[validators.DataRequired()])
+        validators=[])
 
-    display = ["number", "secret"]
+    display = ["number", "password"]
 
     def save(self, room, user, commit=True, **kwargs):
-        room.members.append(user)
-        room.save(commit=commit)
+        memb_profile = MemberProfile(
+            username=user.def_username,
+            user=user,
+            room=room,
+            **kwargs).add(commit=commit)
 
         log = Log(
             info="Someone joined this room",
             category=cfg.LogConstant.CAT_ROOM,
             room=room,
-            user=user,
-            **kwargs).add(commit=commit)
+            member=memb_profile).add(commit=commit)
         print(">>>", log.info, log.room.number, flush=True)
         send(log.clean_json(), to=str(log.room.number), namespace="/chat")
-        return room
+        return memb_profile
 
 
 class FirstTimeGuestForm(FlaskForm):

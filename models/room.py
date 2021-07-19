@@ -12,13 +12,14 @@ from .main import _CRUD, Protected, login_manager
 
 
 
-class Room(_CRUD, db.Model):
+class Room(_CRUD, Protected, db.Model):
     """ """
     __tablename__ = "rooms"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    number = db.Column(db.Integer, nullable=False, unique=True)
-    secret = db.Column(db.String(32), default=None)
-    topic = db.Column(db.Text, nullable=False)
+    number = db.Column(db.String(16), nullable=False, unique=True)
+    password_hash = db.Column(db.String(128), default=None)
+    topic = db.Column(db.String(32), nullable=False)
+    kind = db.Column(db.String(32), default=cfg.RoomConstant.KIND_OPEN)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow)
@@ -28,22 +29,14 @@ class Room(_CRUD, db.Model):
     settings_id = db.Column(db.Integer, db.ForeignKey("settings.id"), nullable=False)
     enterprise_id = db.Column(db.Integer, db.ForeignKey("enterprises.id"), nullable=True)
     members = db.relationship("MemberProfile", backref="room", lazy="dynamic")
+    logs = db.relationship("Log", backref="room", lazy="dynamic")
 
     def __init__(self, **kwargs):
-        kwargs["number"], kwargs["secret"] = self.generate_auth()
-        
+        kwargs["number"] = generate_id(time.time(), 16, keylen=4)
+        while self.query.filter_by(number=kwargs["number"]).first():
+            kwargs["number"] = generate_id(time.time(), 16, keylen=4)
+
         super(Room, self).__init__(**kwargs)
-
-    def generate_auth(self):
-        number = random.randint(cfg.RoomConstant.NUM_LOWER_LIMIT,
-            cfg.RoomConstant.NUM_UPPER_LIMIT)
-        
-        while self.query.filter_by(number=number).first():
-            number = random.randint(cfg.RoomConstant.NUM_LOWER_LIMIT,
-                cfg.RoomConstant.NUM_UPPER_LIMIT)
-
-        secret = generate_id(time.time(), 16, keylen=4)
-        return number, secret
 
     def get_user_username(self, user):
         logs = user.logs.filter_by(room=self).all()
@@ -114,7 +107,7 @@ class MemberProfile(_CRUD, db.Model):
         onupdate=datetime.datetime.utcnow)
 
     # Relationships
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
     logs = db.relationship("Log", backref="member", lazy="dynamic")
 

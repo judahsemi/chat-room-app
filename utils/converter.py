@@ -14,10 +14,9 @@ from models.main import db, User, Room, Settings, Log
 class RealRoom(BaseConverter):
     """ Raise error if room does not exist """
     def to_python(self, room):
-        """ room should be the room id """
+        """ room should be the room number """
         try:
-            room_id = int(room)
-            room = Room.query.get(room_id)
+            room = Room.query.filter_by(number=room).first()
             if room:
                 return room
         except:
@@ -27,6 +26,6 @@ class RealRoom(BaseConverter):
     def to_url(self, room):
         """ room should be the actual room model """
         if isinstance(room, Room) and hasattr(room, "id"):
-            return str(room.id)
+            return str(room.number)
         raise ValidationError()
 

@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Settings, Log, Enterprise, EmployeeProfile
+from models.main import db, User, Room, Settings, Log, MemberProfile
 from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
 
 # from utils.html_object import HtmlTableView
@@ -43,13 +43,13 @@ def join_room():
 
     form = JoinRoomForm()
     if request.method == "POST" and form.validate():
-        room = Room.find(form.number.data, form.secret.data)
+        room = Room.query.filter_by(number=form.number.data).first()
         if room:
-            if user in room.members.all():
+            if room.members.filter_by(user=user).first():
                 flash("You have already joined this room")
                 return redirect(url_for("room_bp.lounge", room=room))
 
-            room = form.save(room, user, commit=True)
+            memb_profile = form.save(room, user, commit=True)
             return redirect(url_for("room_bp.lounge", room=room))
 
         flash("Could not find this room.")
@@ -63,21 +63,11 @@ def lounge(room):
     user = current_user
     prev, _next = navigate_url(request)
     
-    if user not in room.members.all():
+    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
-
-    username = room.get_user_username(user)
-    form = FirstTimeGuestForm(username=username)
-    if request.method == "POST":
-        if not username and form.validate():
-            username = form.save(room, user, commit=True)
-
-        if username:
-            session["username"] = username
-            return redirect(url_for("room_bp.room", room=room))
-    return render_template("room/lounge.html", form=form, room=room,
-        username=username)
+    return render_template("room/lounge.html", memb_profile=memb_profile)
 
 
 @room_bp.route("/room/<real_room:room>/", methods=["GET"])

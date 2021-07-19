@@ -23,22 +23,17 @@
 
 
 {% block main %}
+{% set room=memb_profile.room %}
 <section class="content-section">
   <h2 class="room-topic">{{ room.topic }}</h2>
-  <span class="room-number">room {{ room.number }}</span>
+  <span class="room-number">room number: {{ room.number }}</span>
   <span class="room-info">{{ room.members.all().__len__() }} member(s)</span>
 </section>
 
 
 <section class="form-section">
-  <form action="" method="POST">
-    {% if username %}
-    <p class="form-head">You are entering as {{ username }}</p>
-    {% else %}
-    <h3 class="form-head">Confirm your details before entering</h3>
-
-    {{ create_form(form) }}
-    {% endif %}
+  <form action="{{ url_for('room_bp.room', room=room) }}" method="GET">
+    <p class="form-head">You are entering this room as<br>"{{ memb_profile.username }}"</p>
 
     <button type="submit">Enter</button>
   </form>
