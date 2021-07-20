@@ -38,6 +38,10 @@ class User(_CRUD, Protected, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
+    def get_joined_enterprises(self):
+        enterprises = Enterprise.query.filter(EmployeeProfile.user == self).all()
+        return enterprises
+
     # Flask-Login Requirement
     def get_id(self):
         return str(self.id)
