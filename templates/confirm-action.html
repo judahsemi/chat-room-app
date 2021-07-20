@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/form.css') }}">
+{% endblock %}
+
+
+{% block title %}
+<title>Confirm {{ action|title }}</title>
+{% endblock %}
+
+
+{% block main %}
+<section class="form-section">
+  <form action="{{ next }}" method="POST">
+    <h2 class="form-head">Confirm {{ action|title }}</h2>
+
+    <p class="form-head">Are you sure you want to {% if action %}{{ action|lower }} {% if this %}<a href="{{ this }}">this {{ object }}</a>{% else %}this{% endif %}{% else %}continue with this{% endif %}?</p>
+
+    {{ create_form(form) }}
+
+    <button type="submit">Confirm</button>
+  </form>
+  <div>
+    <a href="{{ prev }}"><button class="submit-btn-inverse">Cancel</button></a>
+  </div>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

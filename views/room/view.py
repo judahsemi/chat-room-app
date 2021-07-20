@@ -12,12 +12,24 @@ import config as cfg
 from config import config
 from models.main import db, User, Room, Settings, Log, MemberProfile
 from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
+from forms.main import LeaveRoomForm, DeleteRoomForm, BlankForm
 
 # from utils.html_object import HtmlTableView
 from utils.helper import navigate_url, generate_id
 
 from .main import room_bp
 
+
+
+@room_bp.route("/rooms/joined/", methods=["GET"])
+@login_required
+def joined_list():
+    """ """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    memb_profiles = MemberProfile.query.filter_by(user=user).all()
+    return render_template("room/joined-list.html", memb_profiles=memb_profiles)
 
 
 @room_bp.route("/rooms/create/", methods=["GET", "POST"])
@@ -86,4 +98,60 @@ def room(room):
     logs = room.logs.all()
     return render_template("room/room.html", form=form, logs=logs, room=room,
         memb_profile=memb_profile)
+
+
+@room_bp.route("/room/<real_room:room>/leave/", methods=["GET", "POST"])
+@login_required
+def leave_room(room):
+    """ """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    if not memb_profile:
+        flash("You have not yet joined this room.")
+        return redirect(prev or url_for("user_bp.dashboard"))
+
+    form = BlankForm()
+    if request.method == "POST" and form.validate():
+        memb_profile = LeaveRoomForm().save(memb_profile, commit=True)
+        return redirect(url_for("room_bp.joined_list"))
+
+    params = {}
+    params["action"] = "leave"
+    params["object"] = "room"
+    params["next"] = request.url
+    params["this"] = url_for("room_bp.lounge", room=room, _external=True)
+    params["prev"] = prev or url_for("room_bp.lounge", room=room, _external=True)
+    return render_template("confirm-action.html", form=form, **params)
+
+
+@room_bp.route("/room/<real_room:room>/delete/", methods=["GET", "POST"])
+@login_required
+def delete_room(room):
+    """ """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    if not memb_profile:
+        flash("You have not yet joined this room.")
+        return redirect(prev or url_for("user_bp.dashboard"))
+
+    if room.admin != current_user:
+        flash("You are not authorized to perform this action.")
+        return redirect(prev or url_for("room_bp.lounge", room=room))
+
+    form = BlankForm()
+    if request.method == "POST" and form.validate():
+        room = DeleteRoomForm().save(room, commit=True)
+        return redirect(url_for("room_bp.joined_list"))
+
+    params = {}
+    params["action"] = "delete"
+    params["object"] = "room"
+    params["next"] = request.url
+    params["this"] = url_for("room_bp.lounge", room=room, _external=True)
+    params["prev"] = prev or url_for("room_bp.lounge", room=room, _external=True)
+    return render_template("confirm-action.html", form=form, **params)
 

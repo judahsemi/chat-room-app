@@ -115,3 +115,24 @@ class RoomMessageForm(FlaskForm):
             **kwargs).add(commit=commit)
         return log
 
+
+class LeaveRoomForm(FlaskForm):
+    display = []
+
+    def save(self, memb_profile, commit=True):
+        memb_profile.delete(commit=commit)
+        return memb_profile
+
+
+class DeleteRoomForm(FlaskForm):
+    display = []
+
+    def save(self, room, commit=True):
+        for memb in room.members:
+            LeaveRoomForm().save(memb, commit=False)
+
+        for log in room.logs:
+            log.delete(commit=False)
+        room.delete(commit=commit)
+        return room
+

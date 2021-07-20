@@ -37,6 +37,13 @@
 
     <button type="submit">Enter</button>
   </form>
+  <div>
+    {% if room.admin == current_user %}
+    <a href="{{ url_for('room_bp.delete_room', room=room) }}"><button class="submit-btn-inverse">Leave & Delete</button></a>
+    {% else %}
+    <a href="{{ url_for('room_bp.leave_room', room=room) }}"><button class="submit-btn-inverse">Leave</button></a>
+    {% endif %}
+  </div>
 </section>
 {% endblock %}
 

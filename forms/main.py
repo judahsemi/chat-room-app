@@ -12,7 +12,13 @@ from models.main import db, User
 
 
 
+class BlankForm(FlaskForm):
+    display = []
+
+
+
 from .auth import RegisterForm, LoginForm
 from .room import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
+from .room import LeaveRoomForm, DeleteRoomForm
 from .enterprise import CreateEnterpriseForm, EditEmployeeProfileForm
 
