@@ -69,10 +69,11 @@
         </li>
         <li class="menu-heading">
           <a href="#"><span>Enterprises</span></a>
-          {% set joined_enterprises = current_user.get_joined_enterprises() %}
-          {% if joined_enterprises %}
+          {% set emp_profiles = current_user.get_active("emp_profiles").all() %}
+          {% if emp_profiles %}
           <ul class="sub-menu">
-            {% for ent in joined_enterprises %}
+            {% for profile in emp_profiles %}
+            {% set ent = profile.enterprise %}
             <li class="menu-subheading">
               <a href="{{ url_for('ent_bp.dashboard', _id=ent.id) }}"><span>{{ ent.name }}</span></a>
             </li>

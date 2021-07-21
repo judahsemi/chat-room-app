@@ -38,6 +38,7 @@ class CreateRoomForm(FlaskForm):
 
         memb_profile = MemberProfile(
             username=user.def_username,
+            is_active=True,
             user=user,
             room=room).add(commit=commit)
 
@@ -62,11 +63,15 @@ class JoinRoomForm(FlaskForm):
     display = ["number", "password"]
 
     def save(self, room, user, commit=True, **kwargs):
-        memb_profile = MemberProfile(
-            username=user.def_username,
-            user=user,
-            room=room,
-            **kwargs).add(commit=commit)
+        memb_profile = room.members.filter_by(user=user).first()
+        if not memb_profile:
+            memb_profile = MemberProfile(
+                username=user.def_username,
+                is_active=True,
+                user=user,
+                room=room,
+                **kwargs).add(commit=commit)
+        memb_profile.update(is_active=True, commit=commit)
 
         log = Log(
             info="Someone joined this room",
@@ -120,7 +125,16 @@ class LeaveRoomForm(FlaskForm):
     display = []
 
     def save(self, memb_profile, commit=True):
-        memb_profile.delete(commit=commit)
+        memb_profile.is_active = False
+        memb_profile.save(commit=commit)
+
+        log = Log(
+            info="{} left this room".format(memb_profile.username),
+            category=cfg.LogConstant.CAT_ROOM,
+            room=room,
+            member=memb_profile).add(commit=commit)
+        print(">>>", log.info, log.room.number, flush=True)
+        send(log.clean_json(), to=str(log.room.number), namespace="/chat")
         return memb_profile
 
 
@@ -129,7 +143,21 @@ class DeleteRoomForm(FlaskForm):
 
     def save(self, room, commit=True):
         for memb in room.members:
-            LeaveRoomForm().save(memb, commit=False)
+            if memb.user == room.admin:
+                admin_profile = memb
+                continue
+
+            memb.delete(commit=False)
+            
+            log = Log(
+                info="Admin removed {} from this room".format(memb.username),
+                category=cfg.LogConstant.CAT_ROOM,
+                room=room,
+                member=memb).add(commit=commit)
+            print(">>>", log.info, log.room.number, flush=True)
+            send(log.clean_json(), to=str(log.room.number), namespace="/chat")
+
+        admin_profile.delete(commit=False)
 
         for log in room.logs:
             log.delete(commit=False)

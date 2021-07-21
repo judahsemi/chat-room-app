@@ -33,6 +33,7 @@ class CreateEnterpriseForm(FlaskForm):
         admin_profile = EmployeeProfile(
             username=user.def_username,
             email=user.email,
+            is_active=True,
             user=user,
             enterprise=enterprise).add(commit=commit)
         return enterprise

@@ -32,8 +32,9 @@
   <h2>Rooms</h2>
 
   <ul class="room-itemlist">
-    {% if joined_rooms %}
-    {% for room in joined_rooms %}
+    {% if memb_profiles %}
+    {% for profile in memb_profiles %}
+    {% set room = profile.room %}
     <li class="room-item">
       <a href="{{ url_for('room_bp.room', room=room) }}">
         <div class="room-card">
@@ -63,8 +64,9 @@
   <h2>Enterprises</h2>
 
   <ul class="room-itemlist">
-    {% if enterprises %}
-    {% for ent in enterprises %}
+    {% if emp_profiles %}
+    {% for profile in emp_profiles %}
+    {% set ent = profile.enterprise %}
     <li class="room-item">
       <a href="{{ url_for('ent_bp.dashboard', _id=ent.id) }}">
         <div class="room-card">

@@ -101,6 +101,7 @@ class MemberProfile(_CRUD, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(64), nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
     joined_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow)

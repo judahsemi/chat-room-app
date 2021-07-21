@@ -36,9 +36,8 @@ def dashboard():
     user = current_user
     prev, _next = navigate_url(request)
 
-    joined_rooms = Room.query.filter(MemberProfile.user == user).all()
-    emp_profiles = EmployeeProfile.query.filter_by(user=user).all()
-    enterprises = Enterprise.query.filter(EmployeeProfile.user == user).all()
-    return render_template("user/dashboard.html", _next=_next, joined_rooms=joined_rooms,
-        emp_profiles=emp_profiles, enterprises=enterprises)
+    memb_profiles = user.get_active("memb_profiles").all()
+    emp_profiles = user.get_active("emp_profiles").all()
+    return render_template("user/dashboard.html", _next=_next,
+        memb_profiles=memb_profiles, emp_profiles=emp_profiles)
 

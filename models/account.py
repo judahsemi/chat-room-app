@@ -38,10 +38,6 @@ class User(_CRUD, Protected, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
-    def get_joined_enterprises(self):
-        enterprises = Enterprise.query.filter(EmployeeProfile.user == self).all()
-        return enterprises
-
     # Flask-Login Requirement
     def get_id(self):
         return str(self.id)
@@ -87,12 +83,13 @@ class EmployeeProfile(_CRUD, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(64), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
     joined_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow)
 
     # Relationships
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     enterprise_id = db.Column(db.Integer, db.ForeignKey("enterprises.id"), nullable=False)
 
     def __repr__(self):

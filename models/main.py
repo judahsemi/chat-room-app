@@ -58,6 +58,11 @@ class _CRUD:
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    def get_active(self, attr):
+        if hasattr(self, attr):
+            return getattr(self, attr).filter_by(is_active=True)
+        raise Exception
+
 
 from .account import User, Enterprise, EmployeeProfile
 from .room import Room, Settings, Log, MemberProfile

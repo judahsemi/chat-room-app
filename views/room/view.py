@@ -28,7 +28,7 @@ def joined_list():
     user = current_user
     prev, _next = navigate_url(request)
 
-    memb_profiles = MemberProfile.query.filter_by(user=user).all()
+    memb_profiles = user.get_active("memb_profiles").all()
     return render_template("room/joined-list.html", memb_profiles=memb_profiles)
 
 
@@ -57,7 +57,7 @@ def join_room():
     if request.method == "POST" and form.validate():
         room = Room.query.filter_by(number=form.number.data).first()
         if room:
-            if room.members.filter_by(user=user).first():
+            if room.get_active("members").filter_by(user=user).first():
                 flash("You have already joined this room")
                 return redirect(url_for("room_bp.lounge", room=room))
 
@@ -75,7 +75,7 @@ def lounge(room):
     user = current_user
     prev, _next = navigate_url(request)
     
-    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
@@ -89,7 +89,7 @@ def room(room):
     user = current_user
     prev, _next = navigate_url(request)
 
-    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
@@ -107,7 +107,7 @@ def leave_room(room):
     user = current_user
     prev, _next = navigate_url(request)
 
-    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
@@ -133,7 +133,7 @@ def delete_room(room):
     user = current_user
     prev, _next = navigate_url(request)
 
-    memb_profile = MemberProfile.query.filter_by(user=user, room=room).first()
+    memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
