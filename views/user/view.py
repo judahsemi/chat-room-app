@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Enterprise, EmployeeProfile, MemberProfile
+from models.main import db, User, Room, MemberProfile
 from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
 
 # from utils.html_object import HtmlTableView
@@ -37,7 +37,6 @@ def dashboard():
     prev, _next = navigate_url(request)
 
     memb_profiles = user.get_active("memb_profiles").all()
-    emp_profiles = user.get_active("emp_profiles").all()
     return render_template("user/dashboard.html", _next=_next,
-        memb_profiles=memb_profiles, emp_profiles=emp_profiles)
+        memb_profiles=memb_profiles)
 

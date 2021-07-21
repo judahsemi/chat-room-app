@@ -20,5 +20,4 @@ class BlankForm(FlaskForm):
 from .auth import RegisterForm, LoginForm
 from .room import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
 from .room import LeaveRoomForm, DeleteRoomForm
-from .enterprise import CreateEnterpriseForm, EditEmployeeProfileForm
 

@@ -31,11 +31,9 @@ def create_app(config_name):
 
     # Views
     from views.user.main import user_bp
-    from views.enterprise.main import ent_bp
     from views.room.main import room_bp
     
     app.register_blueprint(user_bp, url_prefix="")
-    app.register_blueprint(ent_bp, url_prefix="")
     app.register_blueprint(room_bp, url_prefix="")
 
     return app

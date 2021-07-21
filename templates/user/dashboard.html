@@ -25,7 +25,6 @@
 <section class="up">
   <a href="{{ url_for('room_bp.create_room') }}"><button>Create room</button></a>
   <a href="{{ url_for('room_bp.join_room') }}"><button class="up-btn-inverse">Join room</button></a>
-  <a href="{{ url_for('ent_bp.create') }}"><button class="up-btn-inverse">Create enterprise</button></a>
 </section>
 
 <section class="down">
@@ -48,39 +47,6 @@
           </div>
 
           {% if room.admin == current_user %}
-          <button class="card-tag">admin</button>
-          {% endif %}
-        </div>
-      </a>
-    </li>
-    {% endfor %}
-    {% else %}
-    <p>Empty</p>
-    {% endif %}
-  </ul>
-</section>
-
-<section class="down">
-  <h2>Enterprises</h2>
-
-  <ul class="room-itemlist">
-    {% if emp_profiles %}
-    {% for profile in emp_profiles %}
-    {% set ent = profile.enterprise %}
-    <li class="room-item">
-      <a href="{{ url_for('ent_bp.dashboard', _id=ent.id) }}">
-        <div class="room-card">
-          <div class="room-card-left">
-            <span class="room-topic">{{ ent.name }}</span>
-            <span class="room-topic">{{ ent.about }}</span>
-            <!-- <span class="room-lastlog">{ ent.logs.all()[-1].info }}</span> -->
-          </div>
-          <div class="room-card-right">
-            <!-- <span class="room-number">RM { room.number }}</span> -->
-            <!-- <span class="room-lastlogdate">{ ent.logs.all()[-1].logged_at.strftime("%b %d") }}</span> -->
-          </div>
-
-          {% if ent.admin == current_user %}
           <button class="card-tag">admin</button>
           {% endif %}
         </div>

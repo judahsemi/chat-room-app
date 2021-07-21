@@ -56,30 +56,13 @@
           <a href="#"><span>Profile</span></a>
         </li>
         <li class="menu-heading">
-          <a href="#"><span>Direct Messages</span></a>
+          <a href="#"><span>Notifications</span></a>
         </li>
         <li class="menu-heading">
           <a href="{{ url_for('room_bp.joined_list') }}"><span>Rooms</span></a>
         </li>
         <li class="menu-heading">
           <a href="#"><span>Sessions</span></a>
-        </li>
-        <li class="menu-heading">
-          <a href="#"><span>Calendar</span></a>
-        </li>
-        <li class="menu-heading">
-          <a href="#"><span>Enterprises</span></a>
-          {% set emp_profiles = current_user.get_active("emp_profiles").all() %}
-          {% if emp_profiles %}
-          <ul class="sub-menu">
-            {% for profile in emp_profiles %}
-            {% set ent = profile.enterprise %}
-            <li class="menu-subheading">
-              <a href="{{ url_for('ent_bp.dashboard', _id=ent.id) }}"><span>{{ ent.name }}</span></a>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
         </li>
         <li class="menu-heading">
           <a href="#"><span>Settings</span></a>

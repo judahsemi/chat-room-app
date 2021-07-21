@@ -30,8 +30,6 @@ class User(_CRUD, Protected, db.Model):
         onupdate=datetime.datetime.utcnow)
 
     # Relationships
-    owned_enterprises = db.relationship("Enterprise", backref="admin", lazy="dynamic")
-    emp_profiles = db.relationship("EmployeeProfile", backref="user", lazy="dynamic")
     owned_rooms = db.relationship("Room", backref="admin", lazy="dynamic")
     memb_profiles = db.relationship("MemberProfile", backref="user", lazy="dynamic")
 
@@ -56,42 +54,4 @@ class User(_CRUD, Protected, db.Model):
 
     def __repr__(self):
         return "<User: %s %s>" % (self.name, self.email)
-
-
-class Enterprise(_CRUD, db.Model):
-    """ """
-    __tablename__ = "enterprises"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(256), nullable=False)
-    about = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow)
-
-    # Relationships
-    admin_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    employees = db.relationship("EmployeeProfile", backref="enterprise", lazy="dynamic")
-    rooms = db.relationship("Room", backref="enterprise", lazy="dynamic")
-
-    def __repr__(self):
-        return "<Enterprise: %s>" % (self.name)
-
-
-class EmployeeProfile(_CRUD, db.Model):
-    """ """
-    __tablename__ = "employee_profiles"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(32), nullable=False)
-    email = db.Column(db.String(64), nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
-    joined_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow)
-
-    # Relationships
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
-    enterprise_id = db.Column(db.Integer, db.ForeignKey("enterprises.id"), nullable=False)
-
-    def __repr__(self):
-        return "<Employee Profile: %s %s>" % (self.enterprise.name, self.user.email)
 

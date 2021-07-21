@@ -27,7 +27,6 @@ class Room(_CRUD, Protected, db.Model):
     # Relationships
     admin_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     settings_id = db.Column(db.Integer, db.ForeignKey("settings.id"), nullable=False)
-    enterprise_id = db.Column(db.Integer, db.ForeignKey("enterprises.id"), nullable=True)
     members = db.relationship("MemberProfile", backref="room", lazy="dynamic")
     logs = db.relationship("Log", backref="room", lazy="dynamic")
 
