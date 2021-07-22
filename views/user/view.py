@@ -11,7 +11,7 @@ from flask_login import login_required, current_user
 import config as cfg
 from config import config
 from models.main import db, User, Room, MemberProfile
-from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
+from forms.main import CreateRoomForm, JoinRoomForm, EditRoomUsernameForm, RoomMessageForm
 
 # from utils.html_object import HtmlTableView
 from utils.helper import navigate_url, generate_id

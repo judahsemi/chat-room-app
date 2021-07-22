@@ -56,11 +56,11 @@
 
 {% block main %}
 <section class="head-section">
-  <h2 class="room-topic">{{ room.topic }}</h2>
+  <h2 class="room-topic"><a href="{{ url_for('room_bp.lounge', room=memb_profile.room) }}">{{ room.topic }}</a></h2>
 </section>
 
 <section class="chat-section">
-  <ul id="messages" class="log-itemlist">{{ logs.__len__() }}, {{ memb_profile.room.logs.all().__len__() }}
+  <ul id="messages" class="log-itemlist">
     {% for log in logs %}
     {% if log.category == 10 %}
     <li class="notify-item">

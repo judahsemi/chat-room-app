@@ -11,7 +11,7 @@ from flask_login import login_required, current_user
 import config as cfg
 from config import config
 from models.main import db, User, Room, Settings, Log, MemberProfile
-from forms.main import CreateRoomForm, JoinRoomForm, FirstTimeGuestForm, RoomMessageForm
+from forms.main import CreateRoomForm, JoinRoomForm, EditRoomUsernameForm, RoomMessageForm
 from forms.main import LeaveRoomForm, DeleteRoomForm, BlankForm
 
 # from utils.html_object import HtmlTableView
@@ -79,7 +79,11 @@ def lounge(room):
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
-    return render_template("room/lounge.html", memb_profile=memb_profile)
+
+    form = EditRoomUsernameForm() if memb_profile.allow_username_edit else None
+    if request.method == "POST" and form.validate():
+        memb_profile = form.save(memb_profile, commit=True)
+    return render_template("room/lounge.html", form=form, memb_profile=memb_profile)
 
 
 @room_bp.route("/room/<real_room:room>/", methods=["GET"])
@@ -93,6 +97,10 @@ def room(room):
     if not memb_profile:
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
+
+    if memb_profile.allow_username_edit:
+        flash("You have to fill your username before entering.")
+        return redirect(prev or url_for("room_bp.lounge", room=room))
 
     form = RoomMessageForm()
     logs = room.logs.all()
@@ -144,7 +152,7 @@ def delete_room(room):
 
     form = BlankForm()
     if request.method == "POST" and form.validate():
-        room = DeleteRoomForm().save(room, commit=True)
+        room = DeleteRoomForm().save(memb_profile, commit=True)
         return redirect(url_for("room_bp.joined_list"))
 
     params = {}

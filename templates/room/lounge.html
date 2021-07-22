@@ -32,6 +32,22 @@
 
 
 <section class="form-section">
+  {% if memb_profile.allow_username_edit %}
+  <form action="" method="POST">
+    <h3 class="form-head">Enter your username for this room</h3>
+
+    {{ create_form(form) }}
+
+    <button type="submit">{% if room.admin == current_user %}Create{% else %}Join{% endif %}</button>
+  </form>
+  <div>
+    {% if room.admin == current_user %}
+    <a href="{{ url_for('room_bp.delete_room', room=room) }}"><button class="submit-btn-inverse">Delete</button></a>
+    {% else %}
+    <a href="{{ url_for('room_bp.leave_room', room=room) }}"><button class="submit-btn-inverse">Leave</button></a>
+    {% endif %}
+  </div>
+  {% else %}
   <form action="{{ url_for('room_bp.room', room=room) }}" method="GET">
     <p class="form-head">You are entering this room as<br>"{{ memb_profile.username }}"</p>
 
@@ -44,6 +60,7 @@
     <a href="{{ url_for('room_bp.leave_room', room=room) }}"><button class="submit-btn-inverse">Leave</button></a>
     {% endif %}
   </div>
+  {% endif %}
 </section>
 {% endblock %}
 

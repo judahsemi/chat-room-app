@@ -13,7 +13,7 @@ from flask_socketio import join_room, leave_room, close_room, rooms
 import config as cfg
 from config import config
 from models.main import db, User, Room, Settings, Log, MemberProfile
-from forms.main import FirstTimeGuestForm, RoomMessageForm
+from forms.main import EditRoomUsernameForm, RoomMessageForm
 
 # from utils.html_object import HtmlTableView
 from utils.helper import navigate_url
