@@ -32,6 +32,7 @@ class User(_CRUD, Protected, db.Model):
     # Relationships
     owned_rooms = db.relationship("Room", backref="admin", lazy="dynamic")
     memb_profiles = db.relationship("MemberProfile", backref="user", lazy="dynamic")
+    notifications = db.relationship("Notification", backref="receiver", lazy="dynamic")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -54,4 +55,21 @@ class User(_CRUD, Protected, db.Model):
 
     def __repr__(self):
         return "<User: %s %s>" % (self.name, self.email)
+
+
+class Notification(_CRUD, db.Model):
+    """ """
+    __tablename__ = "notifications"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    info = db.Column(db.Text, nullable=False)
+    action_name = db.Column(db.String(32), nullable=True)
+    action_link = db.Column(db.Text, nullable=True)
+    is_read = db.Column(db.Boolean, default=False)
+    received_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    # Relationships
+    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    def __repr__(self):
+        return "<Notification: %s %s>" % (self.receiver.name, self.is_read)
 

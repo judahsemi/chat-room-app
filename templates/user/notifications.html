@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form %}
+
+
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+{% endblock %}
+
+
+{% block head_scripts %}
+{% endblock %}
+
+
+{% block title %}
+<title>Notifications</title>
+{% endblock %}
+
+
+{% block main %}
+<section class="down">
+  <h2>Notifications</h2>
+
+  <ul class="room-itemlist">
+    {% if notifications %}
+    {% for note in notifications %}
+    <li class="room-item">
+      <div class="room-card">
+        <div class="room-card-left">
+          <span class="room-topic">{{ note.info }}</span>
+          {% if note.action_name and note.action_link %}
+          <a href="{{ note.action_link }}"><button class="room-topic">{{ note.action_name }}</button></a>
+          {% endif %}
+          <a href="{{ url_for('user_bp.delete_notification', nid=note.id) }}"><button class="room-topic">Delete</button></a>
+        </div>
+        <div class="room-card-right">
+          <span class="room-lastlogdate">{{ note.received_at.strftime("%b %d") }}</span>
+        </div>
+
+        {% if not note.is_read %}
+        <!-- {{ note.update(is_read=True, commit=True) }} -->
+        <button class="card-tag">unread</button>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>Empty</p>
+    {% endif %}
+  </ul>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

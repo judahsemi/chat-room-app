@@ -64,6 +64,6 @@ class _CRUD:
         raise Exception
 
 
-from .account import User
+from .account import User, Notification
 from .room import Room, Settings, Log, MemberProfile
 
