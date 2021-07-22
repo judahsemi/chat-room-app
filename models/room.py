@@ -20,6 +20,7 @@ class Room(_CRUD, Protected, db.Model):
     password_hash = db.Column(db.String(128), default=None)
     topic = db.Column(db.String(32), nullable=False)
     kind = db.Column(db.String(32), default=cfg.RoomConstant.KIND_OPEN)
+    is_active = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow)

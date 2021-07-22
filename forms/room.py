@@ -91,6 +91,7 @@ class EditRoomUsernameForm(FlaskForm):
 
         if memb_profile.user == memb_profile.room.admin:
             info = "{} created this room".format(memb_profile.username)
+            memb_profile.room.update(is_active=True, commit=True)
         else:
             info = "{} joined this room".format(memb_profile.username)
 

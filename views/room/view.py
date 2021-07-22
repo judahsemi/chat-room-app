@@ -55,7 +55,7 @@ def join_room():
 
     form = JoinRoomForm()
     if request.method == "POST" and form.validate():
-        room = Room.query.filter_by(number=form.number.data).first()
+        room = Room.query.filter_by(number=form.number.data, is_active=True).first()
         if room:
             if room.get_active("members").filter_by(user=user).first():
                 flash("You have already joined this room")
@@ -83,6 +83,7 @@ def lounge(room):
     form = EditRoomUsernameForm() if memb_profile.allow_username_edit else None
     if request.method == "POST" and form.validate():
         memb_profile = form.save(memb_profile, commit=True)
+        return redirect(url_for("room_bp.lounge", room=room))
     return render_template("room/lounge.html", form=form, memb_profile=memb_profile)
 
 
