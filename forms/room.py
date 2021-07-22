@@ -72,7 +72,7 @@ class JoinRoomForm(FlaskForm):
                 room=memb_profile.room,
                 member=memb_profile).add(commit=commit)
             print(">>>", log.info, log.room.number, flush=True)
-            send(log.clean_json(), to=str(log.room.number), namespace="/room-chat")
+            send(log.as_json_dict(), to=log.room.number, namespace="/room-chat")
         return memb_profile
 
 
@@ -101,7 +101,7 @@ class EditRoomUsernameForm(FlaskForm):
             room=memb_profile.room,
             member=memb_profile).add(commit=commit)
         print(">>>", log.info, log.room.number, flush=True)
-        send(log.clean_json(), to=str(log.room.number), namespace="/room-chat")
+        send(log.as_json_dict(), to=log.room.number, namespace="/room-chat")
         return memb_profile
 
 
@@ -136,7 +136,7 @@ class LeaveRoomForm(FlaskForm):
             room=memb_profile.room,
             member=memb_profile).add(commit=commit)
         print(">>>", log.info, log.room.number, flush=True)
-        send(log.clean_json(), to=str(log.room.number), namespace="/room-chat")
+        send(log.as_json_dict(), to=log.room.number, namespace="/room-chat")
         return memb_profile
 
 
@@ -157,7 +157,7 @@ class DeleteRoomForm(FlaskForm):
                 room=room,
                 member=memb).add(commit=commit)
             print(">>>", log.info, log.room.number, flush=True)
-            send(log.clean_json(), to=str(log.room.number), namespace="/room-chat")
+            send(log.as_json_dict(), to=log.room.number, namespace="/room-chat")
         admin_profile.delete(commit=False)
 
         for log in room.logs:

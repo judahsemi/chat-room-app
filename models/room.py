@@ -87,9 +87,10 @@ class Log(_CRUD, db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
     member_id = db.Column(db.Integer, db.ForeignKey("member_profiles.id"), nullable=True)
 
-    def clean_json(self):
-        return {"info": self.info, "category": self.category, "logged_at": self.logged_at,
-            "room_number": self.room.number}
+    def as_json_dict(self):
+        return {"info": self.info, "category": self.category,
+            "logged_at": self.logged_at.strftime("%H:%M"), "room_number": self.room.number,
+            "member_username": self.member.username}
 
     def __repr__(self):
         return "<Log: %s %s>" % (self.room.number, self.category)

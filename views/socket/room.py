@@ -49,13 +49,8 @@ def receive_message(data, msg):
         category=cfg.LogConstant.CAT_CHAT,
         room=profile.room,
         member=profile).add(commit=True)
-    print("#"*20, log.as_dict(), flush=True)
-
-    ret_json = log.clean_json()
-    ret_json["logged_at"] = str(ret_json.get("logged_at").strftime("%H:%M"))
-    ret_json["sender_username"] = profile.username
-    print(">>>", "Sending message to the entire room", flush=True)
-    send(ret_json, to=str(log.room.number))
+    print(">>>", "Sending message to the entire room", log.room.number, flush=True)
+    send(log.as_json_dict(), to=log.room.number)
 
 
 def validate_request(data):

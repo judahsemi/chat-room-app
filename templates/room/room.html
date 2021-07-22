@@ -37,11 +37,11 @@
       if (msg.category == 10) {
         return `<li class="notify-item"><span class="text">${msg.info}</span></li>`
       }
-      else if (msg.sender_username === data["username"]) {
+      else if (msg.member_username === data["username"]) {
         return `<li class="chat-item flex-right"><span class="chat-item-head flex-right">You, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-right my-chat">${msg.info}</span></li>`
       }
       else {
-        return `<li class="chat-item flex-left"><span class="chat-item-head flex-left">${msg.sender_username}, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-left others-chat">${msg.info}</span></li>`
+        return `<li class="chat-item flex-left"><span class="chat-item-head flex-left">${msg.member_username}, ${msg.logged_at} GMT+1</span><span class="chat-item-chat flex-left others-chat">${msg.info}</span></li>`
       }
     }
   });
