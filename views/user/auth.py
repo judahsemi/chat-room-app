@@ -22,6 +22,7 @@ from .main import user_bp
 
 @user_bp.route("/auth/register", methods=["GET", "POST"])
 def register():
+    """ Create a new account """
     prev, _next = navigate_url(request)
 
     form = RegisterForm()
@@ -36,6 +37,7 @@ def register():
 
 @user_bp.route("/auth/login", methods=["GET", "POST"])
 def login():
+    """ Login a registered user """
     prev, _next = navigate_url(request)
 
     form = LoginForm()
@@ -54,6 +56,7 @@ def login():
 @user_bp.route("/auth/logout", methods=["GET"])
 @login_required
 def logout():
+    """ Logout a user """
     logout_user()
     flash("You have logged out successfully")
     return redirect(url_for("user_bp.login"))

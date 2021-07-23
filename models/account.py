@@ -18,7 +18,12 @@ def load_user(user_id):
 
 
 class User(_CRUD, Protected, db.Model):
-    """ """
+    """
+    name: The real and full-name of the user.
+    def_username: A username that only the user can have in any room or session.
+    email: User email, used for logging in.
+    password_hash: Hash of account password.
+    """
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64), nullable=False)
@@ -60,7 +65,12 @@ class User(_CRUD, Protected, db.Model):
 
 
 class Notification(_CRUD, db.Model):
-    """ """
+    """
+    info: The text-message of the notification.
+    action_name: A verb that describes what the user should do with the info.
+    action_link: A link that takes the user to where they should go.
+    is_read: Indicates if the notification has been seen by the user.
+    """
     __tablename__ = "notifications"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     info = db.Column(db.Text, nullable=False)

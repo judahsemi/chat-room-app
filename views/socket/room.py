@@ -24,6 +24,7 @@ from .main import socketio
 
 @socketio.on("entered", namespace="/room-chat")
 def entered(data):
+    """ Add user to a room socket """
     result = validate_request(data)
     if not result:
         print(">>>", "Couldn't join room", flush=True)
@@ -37,6 +38,7 @@ def entered(data):
 
 @socketio.on("message", namespace="/room-chat")
 def receive_message(data, msg):
+    """ Receive sent messages and broadcast to the entire room """
     result = validate_request(data)
     if not result:
         print(">>>", "Couldn't join room", flush=True)
@@ -54,6 +56,7 @@ def receive_message(data, msg):
 
 
 def validate_request(data):
+    """ Check if the request can be trusted """
     print("#"*10, data, flush=True)
     room = Room.query.filter_by(number=data["number"]).first()
     profile = MemberProfile.query.filter_by(username=data["username"], room=room).first()
@@ -67,10 +70,12 @@ def validate_request(data):
 
 @socketio.on("connect", namespace="/room-chat")
 def connect():
+    """ Connect event for a room chat """
     print(">>>", "Client connected to namespace: '/room-chat'", flush=True)
 
 
 @socketio.on("disconnect", namespace="/room-chat")
 def disconnect():
+    """ Disconnect event for a room chat """
     print(">>>", "Client disconnected from namespace: '/room-chat'", flush=True)
 

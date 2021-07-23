@@ -22,7 +22,7 @@ from .main import user_bp
 
 @user_bp.route("/", methods=["GET"])
 def index():
-    """ """
+    """ The landing page """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -32,7 +32,7 @@ def index():
 @user_bp.route("/dashboard/", methods=["GET"])
 @login_required
 def dashboard():
-    """ """
+    """ User dashboard """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -44,7 +44,7 @@ def dashboard():
 @user_bp.route("/notifications/", methods=["GET"])
 @login_required
 def list_notifications():
-    """ """
+    """ List user notifications """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -56,7 +56,7 @@ def list_notifications():
 @user_bp.route("/notifications/<nid>/delete", methods=["GET"])
 @login_required
 def delete_notification(nid):
-    """ """
+    """ Delete a notification """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -70,7 +70,7 @@ def delete_notification(nid):
 @user_bp.route("/settings/", methods=["GET"])
 @login_required
 def settings():
-    """ """
+    """ View and edit settings """
     user = current_user
     prev, _next = navigate_url(request)
 

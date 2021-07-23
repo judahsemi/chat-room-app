@@ -24,7 +24,7 @@ from .main import room_bp
 @room_bp.route("/rooms/joined/", methods=["GET"])
 @login_required
 def joined_list():
-    """ """
+    """ List of rooms that user is currently in """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -35,7 +35,7 @@ def joined_list():
 @room_bp.route("/rooms/create/", methods=["GET", "POST"])
 @login_required
 def create_room():
-    """ """
+    """ Create a new room """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -49,7 +49,7 @@ def create_room():
 @room_bp.route("/rooms/join/", methods=["GET", "POST"])
 @login_required
 def join_room():
-    """ """
+    """ Join a fully-created room """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -71,7 +71,7 @@ def join_room():
 @room_bp.route("/room/<real_room:room>/lounge/", methods=["GET", "POST"])
 @login_required
 def lounge(room):
-    """ """
+    """ Shows room info; available to only members """
     user = current_user
     prev, _next = navigate_url(request)
     
@@ -90,7 +90,7 @@ def lounge(room):
 @room_bp.route("/room/<real_room:room>/", methods=["GET"])
 @login_required
 def room(room):
-    """ """
+    """ View of the actual room """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -112,7 +112,7 @@ def room(room):
 @room_bp.route("/room/<real_room:room>/leave/", methods=["GET", "POST"])
 @login_required
 def leave_room(room):
-    """ """
+    """ Leave a room user is currently in """
     user = current_user
     prev, _next = navigate_url(request)
 
@@ -138,7 +138,7 @@ def leave_room(room):
 @room_bp.route("/room/<real_room:room>/delete/", methods=["GET", "POST"])
 @login_required
 def delete_room(room):
-    """ """
+    """ Delete a room user own """
     user = current_user
     prev, _next = navigate_url(request)
 

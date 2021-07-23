@@ -13,7 +13,13 @@ from .main import _CRUD, Protected, login_manager
 
 
 class Room(_CRUD, Protected, db.Model):
-    """ """
+    """
+    number: Unique string used for identifying a room.
+    password_hash: Hash of room password if there is one.
+    topic: The room topic.
+    kind: Used for determining the scope of the room.
+    is_active: Indicates if a room has been fully-created.
+    """
     __tablename__ = "rooms"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     number = db.Column(db.String(16), nullable=False, unique=True)
@@ -62,7 +68,10 @@ class Room(_CRUD, Protected, db.Model):
 
 
 class Settings(_CRUD, db.Model):
-    """ """
+    """
+    max_user: Maximum number of active room members at any one time.
+    allow_download: Indicates if members (excluding the admin) can download room logs.
+    """
     __tablename__ = "settings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     max_user = db.Column(db.Integer, default=2)
@@ -76,7 +85,10 @@ class Settings(_CRUD, db.Model):
 
 
 class Log(_CRUD, db.Model):
-    """ """
+    """
+    info: The text-message of the log.
+    category: The log type, used for determing where and how the message is displayed.
+    """
     __tablename__ = "logs"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     info = db.Column(db.Text, nullable=False)
@@ -97,7 +109,12 @@ class Log(_CRUD, db.Model):
 
 
 class MemberProfile(_CRUD, db.Model):
-    """ """
+    """
+    username: A one-time-edit username just for this room.
+    email: Email that should be displayed in this room.
+    is_active: Indicates if this member is CURRENTLY a member of the room.
+    allow_username_edit: Indicates if the username for this member has ever been set.
+    """
     __tablename__ = "member_profiles"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(32), nullable=False)
