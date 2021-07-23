@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% from "utils.html" import create_form, switch_btn %}
+
+
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/settings.css') }}">
+{% endblock %}
+
+
+{% block head_scripts %}
+{% endblock %}
+
+
+{% block title %}
+<title>Settings</title>
+{% endblock %}
+
+
+{% block main %}
+<section class="section">
+  <table>
+    <form class="form-group" action="" method="POST">
+      <tr class="form-head">
+        <th class="form-title"><h3>Account</h3></th>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Name</td>
+        <td class="field-value">{{ user.name }}</td>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Default Username</td>
+        <td class="field-value"><input type="text" name="" value="{{ user.def_username }}"></td>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Email</td>
+        <td class="field-value">{{ user.email }}</td>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Delete account</td>
+        <td class="field-value"><a href=""><button type="button">Delete</button></a></td>
+      </tr>
+    </form>
+
+    <form class="form-group" action="" method="POST">
+      <tr class="form-head">
+        <th class="form-title"><h3>Notifications</h3></th>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Via Email</td>
+        <td class="field-value">
+          {{ switch_btn(id="via-email") }}
+        </td>
+      </tr>
+    </form>
+
+    <form class="form-group" action="" method="POST">
+      <tr class="form-head">
+        <th class="form-title"><h3>Chat</h3></th>
+      </tr>
+      <tr class="field">
+        <td class="field-name">Enter is Send</td>
+        <td class="field-value">
+          {{ switch_btn(id="enter-is-send") }}
+        </td>
+      </tr>
+    </form>
+  </table>
+</section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

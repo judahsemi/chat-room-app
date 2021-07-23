@@ -21,3 +21,14 @@
 {% endmacro %}
 
 
+{% macro switch_btn(id="", checked=False) %}
+  <div class="switch">
+    <input type="checkbox" id="{{ id }}" {% if checked %}checked{% endif %}>
+    <label for="{{ id }}">
+      <span></span>
+      <span> </span>
+    </label>
+  </div>
+{% endmacro %}
+
+

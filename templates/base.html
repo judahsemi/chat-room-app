@@ -53,9 +53,6 @@
           <a href="{{ url_for('user_bp.dashboard') }}"><span>Dashboard</span></a>
         </li>
         <li class="menu-heading">
-          <a href="#"><span>Profile</span></a>
-        </li>
-        <li class="menu-heading">
           <a href="{{ url_for('user_bp.list_notifications') }}"><span>Notifications</span></a>
         </li>
         <li class="menu-heading">
@@ -65,7 +62,7 @@
           <a href="#"><span>Sessions</span></a>
         </li>
         <li class="menu-heading">
-          <a href="#"><span>Settings</span></a>
+          <a href="{{ url_for('user_bp.settings') }}"><span>Settings</span></a>
         </li>
         <li class="menu-heading">
           <a href="{{ url_for('user_bp.logout') }}"><span>Logout</span></a>

@@ -66,3 +66,13 @@ def delete_notification(nid):
         notification.delete(commit=True)
     return redirect(url_for("user_bp.list_notifications"))
 
+
+@user_bp.route("/settings/", methods=["GET"])
+@login_required
+def settings():
+    """ """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    return render_template("user/settings.html", _next=_next, user=user)
+
