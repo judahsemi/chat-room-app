@@ -28,10 +28,8 @@ def register():
     form = RegisterForm()
     if request.method == "POST" and form.validate():
         user = form.save(commit=True)
-        login_user(user, remember=bool(request.form.get("remember")))
-
         flash("Registration successful")
-        return redirect(prev or url_for("user_bp.dashboard"))
+        return redirect(prev or url_for("user_bp.login"))
     return render_template("user/register.html", form=form, _next=prev)
 
 
@@ -41,15 +39,13 @@ def login():
     prev, _next = navigate_url(request)
 
     form = LoginForm()
-
     if request.method == "POST" and form.validate():
         user = User.authenticate(
             User.email == form.email.data, password=form.password.data)
         if user:
-            login_user(user, remember=bool(request.form.get("remember")))
+            user = form.save(user, request.form.get("remember"))
+            flash("Login successful")
             return redirect(prev or url_for("user_bp.dashboard"))
-
-        flash("Invalid Login Credentials")
     return render_template("user/login.html", form=form, _next=prev)
 
 

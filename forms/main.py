@@ -16,7 +16,6 @@ class BlankForm(FlaskForm):
     display = []
 
 
-
 from .auth import RegisterForm, LoginForm
 from .room import CreateRoomForm, JoinRoomForm, EditRoomUsernameForm, RoomMessageForm
 from .room import LeaveRoomForm, DeleteRoomForm

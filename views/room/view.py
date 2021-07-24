@@ -42,6 +42,7 @@ def create_room():
     form = CreateRoomForm()
     if request.method == "POST" and form.validate():
         room = form.save(user, commit=True)
+        flash("Created successfully")
         return redirect(url_for("room_bp.lounge", room=room))
     return render_template("room/create.html", form=form)
 
@@ -62,9 +63,8 @@ def join_room():
                 return redirect(url_for("room_bp.lounge", room=room))
 
             memb_profile = form.save(room, user, commit=True)
+            flash("Joined successfully.")
             return redirect(url_for("room_bp.lounge", room=room))
-
-        flash("Could not find this room.")
     return render_template("room/join.html", form=form)
 
 
@@ -80,7 +80,7 @@ def lounge(room):
         flash("You have not yet joined this room.")
         return redirect(prev or url_for("user_bp.dashboard"))
 
-    form = EditRoomUsernameForm() if memb_profile.allow_username_edit else None
+    form = EditRoomUsernameForm(memb_profile) if memb_profile.allow_username_edit else None
     if request.method == "POST" and form.validate():
         memb_profile = form.save(memb_profile, commit=True)
         return redirect(url_for("room_bp.lounge", room=room))
@@ -124,6 +124,7 @@ def leave_room(room):
     form = BlankForm()
     if request.method == "POST" and form.validate():
         memb_profile = LeaveRoomForm().save(memb_profile, commit=True)
+        flash("Left successfully.")
         return redirect(url_for("room_bp.joined_list"))
 
     params = {}
@@ -154,6 +155,7 @@ def delete_room(room):
     form = BlankForm()
     if request.method == "POST" and form.validate():
         room = DeleteRoomForm().save(memb_profile, commit=True)
+        flash("Deleted successfully.")
         return redirect(url_for("room_bp.joined_list"))
 
     params = {}
