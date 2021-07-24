@@ -38,8 +38,6 @@ class User(_CRUD, Protected, db.Model):
     owned_rooms = db.relationship("Room", backref="admin", lazy="dynamic")
     memb_profiles = db.relationship("MemberProfile", backref="user", lazy="dynamic")
     notifications = db.relationship("Notification", backref="receiver", lazy="dynamic")
-    owned_sessions = db.relationship("Session", backref="anchor", lazy="dynamic")
-    part_profiles = db.relationship("ParticipantProfile", backref="user", lazy="dynamic")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

@@ -66,5 +66,4 @@ class _CRUD:
 
 from .account import User, Notification
 from .room import Room, Settings, Log, MemberProfile
-from .session import Session, Rule, Record, ParticipantProfile
 
