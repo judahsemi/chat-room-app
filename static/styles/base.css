@@ -35,6 +35,33 @@ main {
   align-items: stretch;
 }
 
+.flash {
+  margin: 10px 20px;
+  padding: 12px 20px;
+  
+  display: block;
+  border: 2.5px solid #ffeed7;
+  border-radius: 4px;
+  background-color: #fff2de;
+  color: #ffb948;
+
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 25px;
+}
+
+.flash-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+}
+
+.flash-success {
+  background-color: #def2de;
+  border-color: #d3eed7;
+  color: #4ab948;
+}
+
 footer {
   flex: 0 1 auto;
 

@@ -42,7 +42,7 @@ def create_room():
     form = CreateRoomForm()
     if request.method == "POST" and form.validate():
         room = form.save(user, commit=True)
-        flash("Created successfully")
+        flash("Created successfully.", "success")
         return redirect(url_for("room_bp.lounge", room=room))
     return render_template("room/create.html", form=form)
 
@@ -59,11 +59,11 @@ def join_room():
         room = Room.query.filter_by(number=form.number.data, is_active=True).first()
         if room:
             if room.get_active("members").filter_by(user=user).first():
-                flash("You have already joined this room")
+                flash("You have already joined this room.", success="message")
                 return redirect(url_for("room_bp.lounge", room=room))
 
             memb_profile = form.save(room, user, commit=True)
-            flash("Joined successfully.")
+            flash("Joined successfully.", "success")
             return redirect(url_for("room_bp.lounge", room=room))
     return render_template("room/join.html", form=form)
 
@@ -77,7 +77,7 @@ def lounge(room):
     
     memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
-        flash("You have not yet joined this room.")
+        flash("You have not yet joined this room.", "error")
         return redirect(prev or url_for("user_bp.dashboard"))
 
     form = EditRoomUsernameForm(memb_profile) if memb_profile.allow_username_edit else None
@@ -96,11 +96,11 @@ def room(room):
 
     memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
-        flash("You have not yet joined this room.")
+        flash("You have not yet joined this room.", "error")
         return redirect(prev or url_for("user_bp.dashboard"))
 
     if memb_profile.allow_username_edit:
-        flash("You have to fill your username before entering.")
+        flash("You are to fill your username before entering.", "error")
         return redirect(prev or url_for("room_bp.lounge", room=room))
 
     form = RoomMessageForm()
@@ -118,13 +118,13 @@ def leave_room(room):
 
     memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
-        flash("You have not yet joined this room.")
+        flash("You have not yet joined this room.", "error")
         return redirect(prev or url_for("user_bp.dashboard"))
 
     form = BlankForm()
     if request.method == "POST" and form.validate():
         memb_profile = LeaveRoomForm().save(memb_profile, commit=True)
-        flash("Left successfully.")
+        flash("Left successfully.", "success")
         return redirect(url_for("room_bp.joined_list"))
 
     params = {}
@@ -145,17 +145,17 @@ def delete_room(room):
 
     memb_profile = room.get_active("members").filter_by(user=user).first()
     if not memb_profile:
-        flash("You have not yet joined this room.")
+        flash("You have not yet joined this room.", "error")
         return redirect(prev or url_for("user_bp.dashboard"))
 
     if room.admin != current_user:
-        flash("You are not authorized to perform this action.")
+        flash("You are not authorized to perform this action.", "error")
         return redirect(prev or url_for("room_bp.lounge", room=room))
 
     form = BlankForm()
     if request.method == "POST" and form.validate():
         room = DeleteRoomForm().save(memb_profile, commit=True)
-        flash("Deleted successfully.")
+        flash("Deleted successfully.", "success")
         return redirect(url_for("room_bp.joined_list"))
 
     params = {}

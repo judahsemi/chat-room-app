@@ -52,6 +52,18 @@ input:focus, textarea:focus, select:focus {
   border: #7c3abc 1px solid;
 }
 
+.has-error label {
+  color: #ff0039;
+}
+
+.has-error input {
+  border-color: #ff0039;
+}
+
+.input-error {
+  color: #ff0039;
+}
+
 form button[type=submit] {
   padding: 12px 16px;
   margin: 8px 0;

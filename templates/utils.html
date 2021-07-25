@@ -6,14 +6,14 @@
   {{ form.hidden_tag() }}
 
   {% for fieldname in form.display %}
-  <div class="input-group">
+  <div class="input-group {% if form[fieldname].errors %}has-error{% endif %}">
     {{ form[fieldname].label() }}
     <div>
       {{ form[fieldname](class="") }}
       {% if form[fieldname].errors %}
-        {% for error in form[fieldname].errors %}
-          <span>{{ error }}</span>
-        {% endfor %}
+      {% for error in form[fieldname].errors %}
+      {% if error %}<span class="input-error">{{ error }}</span>{% endif %}
+      {% endfor %}
       {% endif %}
     </div>
   </div>
@@ -30,5 +30,17 @@
     </label>
   </div>
 {% endmacro %}
+
+
+{% macro flash_messages() %}
+  <div>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+
+
 
 

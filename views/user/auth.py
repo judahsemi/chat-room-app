@@ -28,7 +28,7 @@ def register():
     form = RegisterForm()
     if request.method == "POST" and form.validate():
         user = form.save(commit=True)
-        flash("Registration successful")
+        flash("Registered successfully.", "success")
         return redirect(prev or url_for("user_bp.login"))
     return render_template("user/register.html", form=form, _next=prev)
 
@@ -44,7 +44,7 @@ def login():
             User.email == form.email.data, password=form.password.data)
         if user:
             user = form.save(user, request.form.get("remember"))
-            flash("Login successful")
+            flash("Logged in successfully.", "success")
             return redirect(prev or url_for("user_bp.dashboard"))
     return render_template("user/login.html", form=form, _next=prev)
 
@@ -54,6 +54,6 @@ def login():
 def logout():
     """ Logout a user """
     logout_user()
-    flash("You have logged out successfully")
+    flash("You have logged out.", "message")
     return redirect(url_for("user_bp.login"))
 

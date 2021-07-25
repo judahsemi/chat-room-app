@@ -62,7 +62,7 @@ def delete_notification(nid):
 
     notification = user.notifications.filter_by(id=nid).first()
     if notification:
-        flash("Deleted successfully")
+        flash("Deleted successfully.", "success")
         notification.delete(commit=True)
     return redirect(url_for("user_bp.list_notifications"))
 
