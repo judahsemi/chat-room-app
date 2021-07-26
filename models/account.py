@@ -42,6 +42,9 @@ class User(_CRUD, Protected, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
+    def unread_notes(self):
+        return self.notifications.filter_by(is_read=False).all()
+
     # Flask-Login Requirement
     def get_id(self):
         return str(self.id)

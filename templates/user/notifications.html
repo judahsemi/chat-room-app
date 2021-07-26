@@ -18,29 +18,29 @@
 
 
 {% block main %}
-<section class="down">
+<section class="up">
   <h2>Notifications</h2>
+</section>
 
+<section class="down">
   <ul class="room-itemlist">
     {% if notifications %}
     {% for note in notifications %}
     <li class="room-item">
       <div class="room-card">
         <div class="room-card-left">
-          <span class="room-topic">{{ note.info }}</span>
-          {% if note.action_name and note.action_link %}
-          <a href="{{ note.action_link }}"><button class="room-topic">{{ note.action_name }}</button></a>
-          {% endif %}
-          <a href="{{ url_for('user_bp.delete_notification', nid=note.id) }}"><button class="room-topic">Delete</button></a>
+          <span class="room-topic {% if note.is_read %}room-topic-read{% endif %}">{{ note.info }}</span>
+          <span class="room-lastlog">
+            {% if note.action_name and note.action_link %}
+            <a href="{{ note.action_link }}"><button class="room-lastlog">{{ note.action_name }}</button></a>
+            {% endif %}
+            <a href="{{ url_for('user_bp.delete_notification', nid=note.id) }}"><button class="room-lastlog">Delete</button></a>
+          </span>
         </div>
         <div class="room-card-right">
           <span class="room-lastlogdate">{{ note.received_at.strftime("%b %d") }}</span>
+          <span class="room-lastlog input-error">{% if not note.is_read %}<!-- {{ note.update(is_read=True, commit=True) }} -->unread{% endif %}</span>
         </div>
-
-        {% if not note.is_read %}
-        <!-- {{ note.update(is_read=True, commit=True) }} -->
-        <button class="card-tag">unread</button>
-        {% endif %}
       </div>
     </li>
     {% endfor %}
