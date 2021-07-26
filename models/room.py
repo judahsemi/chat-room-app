@@ -44,6 +44,28 @@ class Room(_CRUD, Protected, db.Model):
 
         super(Room, self).__init__(**kwargs)
 
+    @classmethod
+    def recommended(cls, admin_user, rooms=None, topk=10):
+        rooms = rooms or cls.query.filter_by(is_active=True, admin=admin_user)
+        return cls.newest(rooms=rooms, topk=topk)
+
+    @classmethod
+    def newest(cls, rooms=None, topk=10):
+        rooms = rooms or cls.query.filter_by(is_active=True)
+        return rooms.order_by(cls.created_at.desc()).all()[:topk]
+
+    @classmethod
+    def popular(cls, rooms=None, topk=10):
+        rooms = rooms or cls.query.filter_by(is_active=True)
+        non_admin_rooms = [r for r in rooms.all() if r.admin.def_username != "admin"]
+        return sorted(non_admin_rooms, key=lambda x: len(x.members.all()))[::-1][:topk]
+
+    @classmethod
+    def most_active(cls, rooms=None, topk=10):
+        rooms = rooms or cls.query.filter_by(is_active=True)
+        non_admin_rooms = [r for r in rooms.all() if r.admin.def_username != "admin"]
+        return sorted(non_admin_rooms, key=lambda x: len(x.logs.all()))[::-1][:topk]
+
     def get_user_username(self, user):
         logs = user.logs.filter_by(room=self).all()
         for log in logs:

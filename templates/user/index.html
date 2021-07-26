@@ -4,25 +4,73 @@
 
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
 {% endblock %}
 
 
 {% block title %}
-<title>Index</title>
+<title>Find Room</title>
 {% endblock %}
 
 
 {% block main %}
-<section>
-  <p><a href="{{ url_for('room_bp.join_room') }}"><button>Join room</button></a></p>
+<section class="up">
+  <h3>Recommended</h3>
+  {% if rec_rooms %}
+  {{ room_cards_vertical(rec_rooms) }}
+  {% endif %}
 </section>
 
-<section>
-  <h1>Welcome</h1>
+<section class="up">
+  <h3>Newest</h3>
+  {% if new_rooms %}
+  {{ room_cards_vertical(new_rooms) }}
+  {% endif %}
+</section>
+
+<section class="up">
+  <h3>Popular</h3>
+  {% if pop_rooms %}
+  {{ room_cards_vertical(pop_rooms) }}
+  {% endif %}
+</section>
+
+<section class="down">
+  <h3>Most active</h3>
+  {% if active_rooms %}
+  {{ room_cards_vertical(active_rooms) }}
+  {% endif %}
 </section>
 {% endblock %}
 
 
 {% block scripts %}
 {% endblock %}
+
+
+{% macro room_cards_vertical(rooms) %}
+  <ul class="room-itemlist">
+    {% for room in rooms %}
+    {% if room.is_active %}
+    <li class="room-item">
+      <div class="room-card">
+        <div class="room-card-top">
+          <span class="room-topic">{{ room.topic }}</span>
+        </div>
+        <div class="room-card-bottom">
+          <span class="room-sub-attr">by: {{ room.members.filter_by(user=room.admin).first().username }}</span>
+          <span class="room-sub-attr">{{ room.members.all().__len__() }} members</span>
+          <span class="room-sub-attr">last activity: {{ room.logs.all()[-1].logged_at.strftime("%b %Y") }}</span>
+          {% if current_user.is_authenticated and room.members.filter_by(user=current_user).first() %}
+          <a href="{{ url_for('room_bp.lounge', room=room) }}"><button>Enter</button></a>
+          {% else %}
+          <a href="{{ url_for('room_bp.join_room') }}"><button>Join</button></a>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}
 

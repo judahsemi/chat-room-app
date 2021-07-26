@@ -1,0 +1,99 @@
+
+
+
+.up, .down {
+  padding: 20px;
+}
+
+.down {
+  padding-bottom: 70px;
+}
+
+.room-itemlist {
+  list-style: none;
+  margin: 0px;
+  padding: 20px 0px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  overflow-x: auto;
+}
+
+.room-itemlist li + li {
+  margin-left: 20px;
+}
+
+.room-item {
+  padding: 20px;
+  border: 2px solid #7c3abc;
+  border-radius: 4px;
+
+  display: block;
+}
+
+.room-card {
+  width: 140px;
+  height: 100%;
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: stretch;
+
+  position: relative;
+}
+
+.room-card-top {
+  flex: 1 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: stretch;
+}
+
+.room-topic {
+  font-size: 16px;
+  color: #0c0c0c;
+
+  font-weight: bold;
+}
+
+.room-sub-attr {
+  font-size: 14px;
+  color: #555555;
+  margin-top: 4px;
+}
+
+.room-card-bottom {
+  flex: 0 0 auto;
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-content: stretch;
+}
+
+.room-card-bottom button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  width: 100%;
+  
+  background-color: #7c3abc;
+  color: #ffffff;
+  border: 1.5px solid #7c3abc;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.room-card-bottom button:hover {
+  background-color: #af69ef;
+  color: #ffffff;
+  border-color: #af69ef;
+}
+

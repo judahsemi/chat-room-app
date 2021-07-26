@@ -23,10 +23,16 @@ from .main import user_bp
 @user_bp.route("/", methods=["GET"])
 def index():
     """ The landing page """
+    params = {}
     user = current_user
     prev, _next = navigate_url(request)
 
-    return render_template("user/index.html")
+    admin_user = User.query.filter_by(def_username="admin").first()
+    params["rec_rooms"] = Room.recommended(admin_user, topk=10)
+    params["new_rooms"] = Room.newest(topk=10)
+    params["pop_rooms"] = Room.popular(topk=10)
+    params["active_rooms"] = Room.most_active(topk=10)
+    return render_template("user/index.html", **params)
 
 
 @user_bp.route("/dashboard/", methods=["GET"])
