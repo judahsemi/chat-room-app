@@ -45,7 +45,7 @@ def login():
         if user:
             user = form.save(user, request.form.get("remember"))
             flash("Logged in successfully.", "success")
-            return redirect(prev or url_for("user_bp.dashboard"))
+            return redirect(prev or url_for("room_bp.joined_list"))
     return render_template("user/login.html", form=form, _next=prev)
 
 

@@ -9,10 +9,6 @@
 
 
 {% block head_scripts %}
-<script type="text/javascript">
-  $(document).ready(function() {
-  });
-</script>
 {% endblock %}
 
 
@@ -25,38 +21,6 @@
 <section class="up">
   <a href="{{ url_for('room_bp.create_room') }}"><button>Create room</button></a>
   <a href="{{ url_for('room_bp.join_room') }}"><button class="up-btn-inverse">Join room</button></a>
-</section>
-
-<section class="down">
-  <h2>Rooms</h2>
-
-  <ul class="room-itemlist">
-    {% if memb_profiles %}
-    {% for profile in memb_profiles %}
-    {% set room = profile.room %}
-    <li class="room-item">
-      <a href="{{ url_for('room_bp.room', room=room) }}">
-        <div class="room-card">
-          <div class="room-card-left">
-            <span class="room-topic">{{ room.topic }}</span>
-            <span class="room-lastlog">{{ room.logs.all()[-1].info }}</span>
-          </div>
-          <div class="room-card-right">
-            <!-- <span class="room-number">RM {{ room.number }}</span> -->
-            <span class="room-lastlogdate">{{ room.logs.all()[-1].logged_at.strftime("%b %d") }}</span>
-          </div>
-
-          {% if room.admin == current_user %}
-          <button class="card-tag">admin</button>
-          {% endif %}
-        </div>
-      </a>
-    </li>
-    {% endfor %}
-    {% else %}
-    <p>Empty</p>
-    {% endif %}
-  </ul>
 </section>
 {% endblock %}
 
