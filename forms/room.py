@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, send, emit
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Settings, Log, MemberProfile
+from models.main import db, User, Notification, Room, Settings, Log, MemberProfile
 
 from utils.helper import generate_slug, generate_id
 
@@ -92,6 +92,20 @@ class JoinRoomForm(FlaskForm):
             print(">>>", log.info, log.room.number, flush=True)
             send(log.as_json_dict(), to=log.room.number, namespace="/room-chat")
         return memb_profile
+
+
+class SendRoomInviteForm(FlaskForm):
+    display = []
+
+    def save(self, memb_profile, receiver, invite_link, commit=True):
+        """ Send user a room invite """
+        note = Notification(
+            info="{} invited you to join this room: {}".format(
+                memb_profile.user.def_username, memb_profile.room.topic),
+            action_name="Accept",
+            action_link=invite_link,
+            receiver=receiver).add(commit=commit)
+        return note
 
 
 class EditRoomUsernameForm(FlaskForm):

@@ -27,7 +27,10 @@
 <section class="content-section">
   <h2 class="room-topic">{{ room.topic }}</h2>
   <span class="room-number">room number: {{ room.number }}</span>
-  <span class="room-info">{{ room.get_active("members").filter_by(allow_username_edit=False).all().__len__() }} member(s)</span>
+  <span class="room-info">Admin: {{ room.members.filter_by(user=room.admin).first().username }}</span>
+  {% with count=room.get_active("members").filter_by(allow_username_edit=False).count() %}
+  <span class="room-info">{{ count }} member{% if count >1 %}s{% endif %}</span>
+  {% endwith %}
 </section>
 
 

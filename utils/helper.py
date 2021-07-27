@@ -1,5 +1,6 @@
-import re, os, shutil, time, random, functools
+import re, os, shutil, time, random, functools, datetime
 
+import jwt
 import uuid
 from werkzeug import security
 from werkzeug.utils import secure_filename
@@ -105,4 +106,34 @@ def navigate_url(request):
     prev = request.args.get("next")
     _next = request.path
     return prev, _next
+
+
+def encode_token(data, exp=None):
+    """
+    Encodes data into a token where it can later be retrieved.
+    """
+    try:
+        payload = {
+            "iat": datetime.datetime.utcnow(),
+            "sub": data}
+        if exp and isinstance(exp, datetime.datetime):
+            payload["exp"] = exp
+        return jwt.encode(payload, Config.SECRET_KEY, algorithm="HS256")
+    except Exception as e:
+        return e
+
+
+def decode_token(token):
+    """
+    Retrieves the data encoded in token.
+    """
+    try:
+        payload = jwt.decode(token, Config.SECRET_KEY)
+        return True, payload["sub"]
+    except jwt.ExpiredSignatureError:
+        return False, "Signature expired. Generate a new one."
+    except jwt.InvalidTokenError:
+        return False, "Invalid token. Try again."
+    except Exception as e:
+        return False, "Something went wrong. Try again later."
 

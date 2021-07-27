@@ -12,6 +12,45 @@
   color: #7c3abc;
 }
 
+.head-section input {
+  padding: 8px 14px;
+  background-color: transparent;
+  color: #5c5c5c;
+  border: 1px solid #5c5c5c;
+
+  border-radius: 8px;
+  font-weight: normal;
+}
+
+.head-section input:focus {
+  border-color: #7c3abc;
+}
+
+.head-section button {
+  padding: 8px 14px;
+  background-color: #7c3abc;
+  color: #ffffff;
+  border: 1px solid #7c3abc;
+
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.head-section .up-btn-inverse {
+  padding: 8px 14px;
+  background-color: transparent;
+  color: #7c3abc;
+  border: 1px solid #7c3abc;
+
+  border-radius: 8px;
+}
+
+.head-section button:hover {
+  background-color: #af69ef;
+  color: #ffffff;
+  border: 1px solid #af69ef;
+}
+
 .room-topic {
   text-align: left;
   text-transform: capitalize;

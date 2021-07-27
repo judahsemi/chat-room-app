@@ -3,7 +3,7 @@ import datetime, random, time
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from utils.helper import generate_slug, generate_id
+from utils.helper import generate_slug, generate_id, encode_token, decode_token
 
 import config as cfg
 from config import config
@@ -65,6 +65,16 @@ class Room(_CRUD, Protected, db.Model):
         rooms = rooms or cls.query.filter_by(is_active=True)
         non_admin_rooms = [r for r in rooms.all() if r.admin.def_username != "admin"]
         return sorted(non_admin_rooms, key=lambda x: len(x.logs.all()))[::-1][:topk]
+
+    def generate_join_token(self):
+        return str(encode_token({"id": self.id, "number": self.number}))[2:-1]
+
+    @classmethod
+    def validate_join_token(cls, token):
+        is_valid, data = decode_token(token)
+        if is_valid and isinstance(data, dict):
+            return cls.query.filter_by(id=data.get("id"), number=data.get("number")).first()
+        return is_valid
 
     def get_user_username(self, user):
         logs = user.logs.filter_by(room=self).all()

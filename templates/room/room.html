@@ -57,6 +57,10 @@
 {% block main %}
 <section class="head-section">
   <h2 class="room-topic"><a href="{{ url_for('room_bp.lounge', room=memb_profile.room) }}">{{ room.topic }}</a></h2>
+  <form action="{{ url_for('room_bp.send_room_invite', room=room) }}" method="GET">
+    <input type="search" name="username" placeholder="Enter user username">
+    <button class="up-btn-inverse" type="submit">Invite</button></a>
+  </form>
 </section>
 
 <section class="chat-section">

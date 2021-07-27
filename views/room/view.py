@@ -10,9 +10,9 @@ from flask_login import login_required, current_user
 
 import config as cfg
 from config import config
-from models.main import db, User, Room, Settings, Log, MemberProfile
+from models.main import db, User, Notification, Room, Settings, Log, MemberProfile
 from forms.main import CreateRoomForm, JoinRoomForm, EditRoomUsernameForm, RoomMessageForm
-from forms.main import LeaveRoomForm, DeleteRoomForm, BlankForm
+from forms.main import SendRoomInviteForm, LeaveRoomForm, DeleteRoomForm, BlankForm
 
 # from utils.html_object import HtmlTableView
 from utils.helper import navigate_url, generate_id
@@ -66,6 +66,55 @@ def join_room():
             flash("Joined successfully.", "success")
             return redirect(url_for("room_bp.lounge", room=room))
     return render_template("room/join.html", form=form)
+
+
+@room_bp.route("/rooms/join/link", methods=["GET"])
+@login_required
+def join_room_via_link():
+    """ Join a fully-created room via link """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    room = Room.validate_join_token(request.args.get("token"))
+    if room:
+        if room.get_active("members").filter_by(user=user).first():
+            flash("You have already joined this room.", success="message")
+            return redirect(url_for("room_bp.lounge", room=room))
+
+        memb_profile = JoinRoomForm().save(room, user, commit=True)
+        flash("Joined successfully.", "success")
+        return redirect(url_for("room_bp.lounge", room=room))
+    flash("This link is not valid. Try again later with a new one.", "error")
+    return redirect(prev or url_for("user_bp.index"))
+
+
+@room_bp.route("/room/<real_room:room>/invite", methods=["GET"])
+@login_required
+def send_room_invite(room):
+    """ Invite another user to this room """
+    user = current_user
+    prev, _next = navigate_url(request)
+
+    memb_profile = room.get_active("members").filter_by(user=user).first()
+    if not memb_profile:
+        flash("You have not yet joined this room.", "error")
+        return redirect(prev or url_for("user_bp.dashboard"))
+
+    re_username = request.args.get("username")
+    receiver = User.query.filter_by(def_username=re_username).first()
+    if not receiver:
+        flash("User with username '{}' does not exist.".format(re_username), "error")
+        return redirect(prev or url_for("room_bp.room", room=room))
+
+    if room.get_active("members").filter_by(user=receiver).first():
+        flash("User has already joined this room.", "error")
+        return redirect(prev or url_for("room_bp.room", room=room))
+
+    invite_link = url_for("room_bp.join_room_via_link", token=room.generate_join_token())
+
+    note = SendRoomInviteForm().save(memb_profile, receiver, invite_link, commit=True)
+    flash("Invite sent.", "success")
+    return redirect(prev or url_for("room_bp.room", room=room))
 
 
 @room_bp.route("/room/<real_room:room>/lounge/", methods=["GET", "POST"])

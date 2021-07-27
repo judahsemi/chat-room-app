@@ -61,10 +61,10 @@
           <span class="room-sub-attr">by: {{ room.members.filter_by(user=room.admin).first().username }}</span>
           <span class="room-sub-attr">{{ room.members.all().__len__() }} members</span>
           <span class="room-sub-attr">last activity: {{ room.logs.all()[-1].logged_at.strftime("%b %Y") }}</span>
-          {% if current_user.is_authenticated and room.members.filter_by(user=current_user).first() %}
+          {% if current_user.is_authenticated and room.get_active("members").filter_by(user=current_user).first() %}
           <a href="{{ url_for('room_bp.lounge', room=room) }}"><button>Enter</button></a>
           {% else %}
-          <a href="{{ url_for('room_bp.join_room') }}"><button>Join</button></a>
+          <a href="{{ url_for('room_bp.join_room_via_link', token=room.generate_join_token()) }}"><button>Join</button></a>
           {% endif %}
         </div>
       </div>
