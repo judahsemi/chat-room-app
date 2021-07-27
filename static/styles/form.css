@@ -2,8 +2,11 @@
 
 
 .form-section {
-  margin: auto;
-  padding: 20px;
+  flex: 0 0 auto;
+
+  margin: 0 auto;
+  padding: 50px 20px 70px;
+  width: 100%;
   max-width: 560px;
 }
 

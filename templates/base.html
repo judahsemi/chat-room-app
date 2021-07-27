@@ -62,7 +62,7 @@
           <a href="{{ url_for('user_bp.list_notifications') }}"><span>Notifications</span>{% if current_user.unread_notes() %}<span class="count-bubble">{{ current_user.unread_notes().__len__() }}</span>{% endif %}</a>
         </li>
         <li class="menu-heading">
-          <a href="{{ url_for('room_bp.joined_list') }}"><span>Rooms</span></a>
+          <a href="{{ url_for('room_bp.joined_list') }}"><span>Rooms</span>{% if current_user.unread_notes() %}<span class="count-bubble">{{ current_user.unread_notes().__len__() }}</span>{% endif %}</a>
         </li>
         <!--
         <li class="menu-heading">

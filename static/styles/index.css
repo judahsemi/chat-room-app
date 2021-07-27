@@ -12,7 +12,9 @@
 .room-itemlist {
   list-style: none;
   margin: 0px;
-  padding: 20px 0px;
+  padding: 20px 0px 0px;
+
+  max-width: 720px;
 
   display: flex;
   flex-direction: row;
@@ -26,34 +28,30 @@
   margin-left: 20px;
 }
 
-.room-item {
+.room-card {
+  flex: 0 0 auto;
+
+  width: 180px;
+  height: 100%;
+  min-height: 220px;
   padding: 20px;
+  
   border: 2px solid #7c3abc;
   border-radius: 4px;
-
-  display: block;
-}
-
-.room-card {
-  width: 140px;
-  height: 100%;
-  min-height: 180px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-content: stretch;
-
-  position: relative;
-}
-
-.room-card-top {
-  flex: 1 1 auto;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-content: stretch;
+  align-items: stretch;
+}
+
+.room-card-top {
+  flex: 1 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
 }
 
 .room-topic {
@@ -76,7 +74,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-content: stretch;
+  align-items: stretch;
 }
 
 .room-card-bottom button {

@@ -62,16 +62,13 @@
 
 .room-itemlist a:hover {
   background-color: #e7e9ea;
-  color: white;
 }
 
 .room-card {
   display: flex;
   flex-direction: row;
-  /*justify-content: none;*/
-  /*align-content: none;*/
-
-  position: relative;
+  justify-content: flex-start;
+  align-items: stretch;
 }
 
 .room-card-left {
@@ -80,7 +77,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: stretch;
+  align-items: stretch;
 }
 
 .room-topic {
@@ -111,7 +108,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: stretch;
+  align-items: stretch;
 
   margin-left: 4px;
 }
